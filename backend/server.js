@@ -1,4 +1,3 @@
-```javascript
 const express = require("express");
 const Database = require("better-sqlite3");
 const path = require("path");
@@ -43,7 +42,9 @@ app.use(express.static(path.join(__dirname, "website")));
 // Database
 // ==============================
 
-const db = new Database("health_tests.db");
+const db = new Database(
+    path.join(__dirname, "health_tests.db")
+);
 
 
 // ==============================
@@ -541,4 +542,3 @@ app.listen(PORT, function() {
     );
 
 });
-```
