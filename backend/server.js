@@ -1,9 +1,11 @@
+```javascript
 const express = require("express");
 const Database = require("better-sqlite3");
+const path = require("path");
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -29,6 +31,14 @@ app.use(function(req, res, next) {
 
 });
 
+
+// ==============================
+// Website
+// ==============================
+
+app.use(express.static(path.join(__dirname, "website")));
+
+
 // ==============================
 // Database
 // ==============================
@@ -39,12 +49,13 @@ const db = new Database("health_tests.db");
 // ==============================
 // Create Table
 // ==============================
+
 db.prepare(`
     CREATE TABLE IF NOT EXISTS health_tests (
 
         id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    user_id TEXT,
+        user_id TEXT,
 
         test_date TEXT,
 
@@ -117,6 +128,7 @@ db.prepare(`
     )
 `).run();
 
+
 // ==============================
 // Add New Columns If Needed
 // ==============================
@@ -183,7 +195,6 @@ newColumns.forEach(
         const columnName = column[0];
         const columnType = column[1];
 
-
         const exists =
             existingColumns.some(
                 function(existingColumn) {
@@ -192,7 +203,6 @@ newColumns.forEach(
 
                 }
             );
-
 
         if (!exists) {
 
@@ -210,15 +220,19 @@ newColumns.forEach(
 // Home
 // ==============================
 
-app.get("/", function (req, res) {
+app.get("/", function(req, res) {
 
-    res.send("Health Analyzer Backend is Running!");
+    res.sendFile(
+        path.join(__dirname, "website", "index.html")
+    );
 
 });
+
 
 // ==============================
 // Save Test
 // ==============================
+
 app.post("/api/tests", function(req, res) {
 
     const data = req.body;
@@ -388,7 +402,7 @@ app.post("/api/tests", function(req, res) {
         });
 
     }
-    catch (error) {
+    catch(error) {
 
         console.error(error);
 
@@ -404,6 +418,7 @@ app.post("/api/tests", function(req, res) {
     }
 
 });
+
 
 // ==============================
 // Get Saved Tests
@@ -439,7 +454,7 @@ app.get("/api/tests", function(req, res) {
         res.json(tests);
 
     }
-    catch (error) {
+    catch(error) {
 
         console.error(error);
 
@@ -497,7 +512,7 @@ app.delete("/api/tests", function(req, res) {
         });
 
     }
-    catch (error) {
+    catch(error) {
 
         console.error(error);
 
@@ -514,14 +529,16 @@ app.delete("/api/tests", function(req, res) {
 
 });
 
+
 // ==============================
 // Start Server
 // ==============================
 
-app.listen(PORT, function () {
+app.listen(PORT, function() {
 
     console.log(
-        `Server is running on http://localhost:${PORT}`
+        `Server is running on port ${PORT}`
     );
 
 });
+```

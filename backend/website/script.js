@@ -1,3 +1,4 @@
+```javascript
 /* =========================================================
    Comprehensive Health Test Analyzer
    ========================================================= */
@@ -6,6 +7,12 @@
 /* =========================================================
    GLOBAL VARIABLES
    ========================================================= */
+
+const API_BASE_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "";
+
 
 let userId = localStorage.getItem("healthAnalyzerUserId");
 
@@ -1073,9 +1080,11 @@ function analyzeUrine() {
 
 }
 
+
 /* =========================================================
    SAVE CURRENT TEST TO DATABASE
    ========================================================= */
+
 async function saveCurrentTest() {
 
     const data = {
@@ -1192,7 +1201,7 @@ async function saveCurrentTest() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/tests",
+            API_BASE_URL + "/api/tests",
             {
                 method: "POST",
 
@@ -1243,9 +1252,6 @@ async function saveCurrentTest() {
 
 
 /* =========================================================
-   DISPLAY SAVED TESTS
-   ========================================================= */
-/* =========================================================
    DISPLAY SAVED TESTS FROM DATABASE
    ========================================================= */
 
@@ -1259,10 +1265,10 @@ async function displaySavedTests() {
 
     try {
 
-const response = await fetch(
-    "http://localhost:3000/api/tests?user_id="
-    + encodeURIComponent(userId)
-);
+        const response = await fetch(
+            API_BASE_URL + "/api/tests?user_id="
+            + encodeURIComponent(userId)
+        );
 
 
         if (!response.ok) {
@@ -1386,6 +1392,7 @@ const response = await fetch(
 
 }
 
+
 /* =========================================================
    DISPLAY VALUE
    ========================================================= */
@@ -1407,6 +1414,7 @@ function displayValue(value) {
 
 }
 
+
 /* =========================================================
    DELETE ALL SAVED TESTS FROM DATABASE
    ========================================================= */
@@ -1418,6 +1426,7 @@ async function deleteSavedTests() {
             "Are you sure you want to delete all your saved tests?"
         );
 
+
     if (!confirmed) {
         return;
     }
@@ -1426,7 +1435,7 @@ async function deleteSavedTests() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/tests?user_id="
+            API_BASE_URL + "/api/tests?user_id="
             + encodeURIComponent(userId),
             {
                 method: "DELETE"
@@ -1456,6 +1465,7 @@ async function deleteSavedTests() {
         await displaySavedTests();
 
     }
+
     catch (error) {
 
         console.error(error);
@@ -1468,6 +1478,7 @@ async function deleteSavedTests() {
     }
 
 }
+
 
 /* =========================================================
    TREND TITLE
@@ -1536,6 +1547,7 @@ function getTrendUnit(name) {
 
 }
 
+
 /* =========================================================
    GENERATE TREND FROM DATABASE
    ========================================================= */
@@ -1550,10 +1562,10 @@ async function generateSelectedTrend() {
 
     try {
 
-const response = await fetch(
-    "http://localhost:3000/api/tests?user_id="
-    + encodeURIComponent(userId)
-);
+        const response = await fetch(
+            API_BASE_URL + "/api/tests?user_id="
+            + encodeURIComponent(userId)
+        );
 
 
         if (!response.ok) {
@@ -1720,6 +1732,7 @@ const response = await fetch(
                     }
 
                 }
+
             );
 
     }
@@ -1735,6 +1748,7 @@ const response = await fetch(
     }
 
 }
+
 
 /* =========================================================
    ANALYZE ALL RESULTS
@@ -1814,3 +1828,4 @@ window.onload = function() {
     displaySavedTests();
 
 };
+```
