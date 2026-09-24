@@ -1,11 +1,5 @@
-```javascript
 /* =========================================================
-   Comprehensive Health Test Analyzer
-   ========================================================= */
-
-
-/* =========================================================
-   GLOBAL VARIABLES
+   API CONFIGURATION
    ========================================================= */
 
 const API_BASE_URL =
@@ -14,7 +8,17 @@ const API_BASE_URL =
         : "";
 
 
-let userId = localStorage.getItem("healthAnalyzerUserId");
+/* =========================================================
+   USER ID
+   =========================================================
+   localStorage is used ONLY to keep the browser's user ID.
+   Actual test data is stored in the Backend / Database.
+   ========================================================= */
+
+let userId = localStorage.getItem(
+    "healthAnalyzerUserId"
+);
+
 
 if (!userId) {
 
@@ -33,36 +37,43 @@ if (!userId) {
 }
 
 
-let goodCount = 0;
-let lowCount = 0;
-let highCount = 0;
-let warningCount = 0;
+/* =========================================================
+   SUMMARY VARIABLES
+   ========================================================= */
 
-let abnormalResults = [];
+let goodCount = 0;
+
+let lowCount = 0;
+
+let highCount = 0;
+
+let warningCount = 0;
 
 let trendChart = null;
 
 
 /* =========================================================
-   TEST DATABASE
+   TEST DEFINITIONS
+   =========================================================
+   Common educational adult reference ranges.
+   The user's own laboratory reference range should take
+   priority because ranges vary between laboratories.
    ========================================================= */
 
 const tests = [
 
-    /* ================= CBC ================= */
-
     {
         id: "hemoglobin",
         name: "Hemoglobin",
-        low: 12,
-        high: 17.5,
+        male: [13, 18],
+        female: [12, 16],
         unit: "g/dL"
     },
 
     {
         id: "wbc",
         name: "WBC",
-        low: 4,
+        low: 4.5,
         high: 11,
         unit: "×10³/µL"
     },
@@ -70,8 +81,8 @@ const tests = [
     {
         id: "rbc",
         name: "RBC",
-        low: 4,
-        high: 6,
+        male: [4.2, 5.7],
+        female: [3.8, 5.1],
         unit: "×10⁶/µL"
     },
 
@@ -79,23 +90,23 @@ const tests = [
         id: "platelets",
         name: "Platelets",
         low: 150,
-        high: 450,
+        high: 400,
         unit: "×10³/µL"
     },
 
     {
         id: "hematocrit",
         name: "Hematocrit",
-        low: 36,
-        high: 52,
+        male: [40, 55],
+        female: [36, 48],
         unit: "%"
     },
 
     {
         id: "mcv",
         name: "MCV",
-        low: 80,
-        high: 100,
+        low: 79,
+        high: 95,
         unit: "fL"
     },
 
@@ -115,19 +126,14 @@ const tests = [
         unit: "%"
     },
 
-
-    /* ================= DIABETES ================= */
-
     {
         id: "glucose",
         name: "Fasting Blood Glucose",
         low: 70,
         high: 99,
-        unit: "mg/dL"
+        unit: "mg/dL",
+        special: "fastingGlucose"
     },
-
-
-    /* ================= LIPID ================= */
 
     {
         id: "totalCholesterol",
@@ -142,15 +148,15 @@ const tests = [
         name: "LDL",
         low: 0,
         high: 99,
-        unit: "mg/dL"
+        unit: "mg/dL",
+        special: "ldl"
     },
 
     {
         id: "hdl",
         name: "HDL",
-        low: 40,
-        high: 100,
-        unit: "mg/dL"
+        unit: "mg/dL",
+        special: "hdl"
     },
 
     {
@@ -161,21 +167,18 @@ const tests = [
         unit: "mg/dL"
     },
 
-
-    /* ================= KIDNEY ================= */
-
     {
         id: "creatinine",
         name: "Creatinine",
-        low: 0.6,
-        high: 1.3,
+        male: [0.74, 1.35],
+        female: [0.59, 1.04],
         unit: "mg/dL"
     },
 
     {
         id: "bun",
         name: "BUN",
-        low: 7,
+        low: 6,
         high: 20,
         unit: "mg/dL"
     },
@@ -184,42 +187,40 @@ const tests = [
         id: "egfr",
         name: "eGFR",
         low: 90,
-        high: 200,
-        unit: "mL/min/1.73m²"
+        high: Infinity,
+        unit: "mL/min/1.73m²",
+        special: "egfr"
     },
 
     {
         id: "uricAcid",
         name: "Uric Acid",
-        low: 3.5,
-        high: 7.2,
+        male: [3.5, 7.2],
+        female: [2.6, 6.0],
         unit: "mg/dL"
     },
-
-
-    /* ================= LIVER ================= */
 
     {
         id: "alt",
         name: "ALT",
-        low: 7,
-        high: 56,
+        low: 4,
+        high: 36,
         unit: "U/L"
     },
 
     {
         id: "ast",
         name: "AST",
-        low: 10,
-        high: 40,
+        low: 8,
+        high: 33,
         unit: "U/L"
     },
 
     {
         id: "alp",
         name: "ALP",
-        low: 44,
-        high: 147,
+        low: 20,
+        high: 130,
         unit: "U/L"
     },
 
@@ -234,27 +235,24 @@ const tests = [
     {
         id: "albumin",
         name: "Albumin",
-        low: 3.5,
-        high: 5,
+        low: 3.4,
+        high: 5.4,
         unit: "g/dL"
     },
 
     {
         id: "totalProtein",
         name: "Total Protein",
-        low: 6,
+        low: 6.0,
         high: 8.3,
         unit: "g/dL"
     },
-
-
-    /* ================= THYROID ================= */
 
     {
         id: "tsh",
         name: "TSH",
         low: 0.4,
-        high: 4,
+        high: 4.8,
         unit: "mIU/L"
     },
 
@@ -262,50 +260,47 @@ const tests = [
         id: "freeT4",
         name: "Free T4",
         low: 0.8,
-        high: 1.8,
+        high: 1.9,
         unit: "ng/dL"
     },
-
-
-    /* ================= VITAMINS ================= */
 
     {
         id: "vitaminD",
         name: "Vitamin D",
-        low: 30,
-        high: 100,
+        low: 20,
+        high: 50,
         unit: "ng/mL"
     },
 
     {
         id: "vitaminB12",
         name: "Vitamin B12",
-        low: 200,
-        high: 900,
+        low: 299,
+        high: 1054,
         unit: "pg/mL"
     },
 
     {
         id: "folate",
         name: "Folate",
-        low: 4,
-        high: 20,
+        low: 2.7,
+        high: 17,
         unit: "ng/mL"
     },
 
     {
         id: "ferritin",
         name: "Ferritin",
-        low: 20,
-        high: 300,
+        male: [30, 400],
+        female: [13, 150],
         unit: "ng/mL"
     },
 
     {
         id: "iron",
         name: "Iron",
-        low: 60,
-        high: 170,
+        male: [59, 158],
+        female: [37, 145],
         unit: "µg/dL"
     },
 
@@ -321,7 +316,7 @@ const tests = [
         id: "calcium",
         name: "Calcium",
         low: 8.5,
-        high: 10.5,
+        high: 10.2,
         unit: "mg/dL"
     },
 
@@ -333,48 +328,369 @@ const tests = [
         unit: "mg/dL"
     },
 
-
-    /* ================= INFLAMMATION ================= */
-
     {
         id: "crp",
         name: "CRP",
         low: 0,
-        high: 5,
-        unit: "mg/L"
+        high: 0.8,
+        unit: "mg/dL"
     },
 
     {
         id: "esr",
         name: "ESR",
-        low: 0,
-        high: 20,
-        unit: "mm/hr"
+        unit: "mm/hr",
+        special: "esr"
     }
 
 ];
 
 
 /* =========================================================
-   RANGE CHECK
+   HELPER FUNCTIONS
    ========================================================= */
 
-function checkRange(value, low, high) {
+function getGender() {
 
-    if (value < low) {
-        return "Low";
+    const gender =
+        document.getElementById("gender");
+
+    return gender
+        ? gender.value
+        : "";
+}
+
+
+function getAge() {
+
+    const age =
+        document.getElementById("age");
+
+    if (!age || age.value === "") {
+        return null;
     }
 
-    if (value > high) {
-        return "High";
+    const value =
+        Number(age.value);
+
+    return Number.isFinite(value)
+        ? value
+        : null;
+}
+
+
+function formatNumber(value) {
+
+    if (value === Infinity) {
+        return "No fixed upper limit";
     }
 
-    return "Good";
+    if (Number.isInteger(value)) {
+        return String(value);
+    }
+
+    return String(value);
 }
 
 
 /* =========================================================
-   RESET
+   GET TEST RANGE
+   ========================================================= */
+
+function getTestRange(test) {
+
+    const gender =
+        getGender();
+
+    const age =
+        getAge();
+
+
+    /* Gender-specific */
+
+    if (
+        test.male &&
+        test.female
+    ) {
+
+        if (gender === "Male") {
+
+            return test.male;
+        }
+
+        if (gender === "Female") {
+
+            return test.female;
+        }
+
+        return null;
+    }
+
+
+    /* ESR */
+
+    if (
+        test.special === "esr"
+    ) {
+
+        if (
+            gender === "Male" &&
+            age !== null
+        ) {
+
+            if (age <= 50) {
+                return [0, 15];
+            }
+
+            return [0, 20];
+        }
+
+
+        if (
+            gender === "Female" &&
+            age !== null
+        ) {
+
+            if (age <= 50) {
+                return [0, 20];
+            }
+
+            return [0, 30];
+        }
+
+
+        return null;
+    }
+
+
+    /* Standard range */
+
+    if (
+        test.low !== undefined &&
+        test.high !== undefined
+    ) {
+
+        return [
+            test.low,
+            test.high
+        ];
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   REFERENCE RANGES
+   ========================================================= */
+
+function updateReferenceRanges() {
+
+    tests.forEach(function(test) {
+
+        const rangeElement =
+            document.getElementById(
+                test.id + "Range"
+            );
+
+
+        if (!rangeElement) {
+            return;
+        }
+
+
+        if (
+            test.special ===
+            "fastingGlucose"
+        ) {
+
+            rangeElement.textContent =
+                "Normal: < 100 mg/dL | Prediabetes: 100–125 | Diabetes: ≥ 126";
+
+            return;
+        }
+
+
+        if (
+            test.special === "ldl"
+        ) {
+
+            rangeElement.textContent =
+                "General target: < 100 mg/dL; target may vary by cardiovascular risk.";
+
+            return;
+        }
+
+
+        if (
+            test.special === "hdl"
+        ) {
+
+            if (
+                getGender() === "Male"
+            ) {
+
+                rangeElement.textContent =
+                    "Low: < 40 mg/dL | ≥ 60 mg/dL is generally favorable";
+
+            } else if (
+                getGender() === "Female"
+            ) {
+
+                rangeElement.textContent =
+                    "Low: < 50 mg/dL | ≥ 60 mg/dL is generally favorable";
+
+            } else {
+
+                rangeElement.textContent =
+                    "Male low: < 40 | Female low: < 50 | ≥ 60 is generally favorable";
+            }
+
+            return;
+        }
+
+
+        if (
+            test.special === "egfr"
+        ) {
+
+            rangeElement.textContent =
+                "Common reference: ≥ 90 mL/min/1.73m²";
+
+            return;
+        }
+
+
+        const range =
+            getTestRange(test);
+
+
+        if (!range) {
+
+            if (
+                test.male &&
+                test.female
+            ) {
+
+                rangeElement.textContent =
+                    "Select gender to show reference range.";
+
+            } else {
+
+                rangeElement.textContent =
+                    "";
+            }
+
+            return;
+        }
+
+
+        rangeElement.textContent =
+            "Reference: " +
+            formatNumber(range[0]) +
+            " - " +
+            formatNumber(range[1]) +
+            " " +
+            test.unit;
+
+    });
+
+
+    /* Update ESR manually if needed */
+
+    const esrRange =
+        document.getElementById(
+            "esrRange"
+        );
+
+
+    if (esrRange) {
+
+        const age = getAge();
+
+        const gender = getGender();
+
+
+        if (
+            gender &&
+            age !== null
+        ) {
+
+            const range =
+                getTestRange(
+                    tests.find(
+                        test =>
+                            test.id === "esr"
+                    )
+                );
+
+
+            if (range) {
+
+                esrRange.textContent =
+                    "Reference: " +
+                    range[0] +
+                    " - " +
+                    range[1] +
+                    " mm/hr";
+            }
+
+        } else {
+
+            esrRange.textContent =
+                "Select age and gender to show reference.";
+        }
+    }
+
+}
+
+
+/* =========================================================
+   RANGE CHECK
+   ========================================================= */
+
+function checkRange(
+    value,
+    range
+) {
+
+    if (!Number.isFinite(value)) {
+        return null;
+    }
+
+
+    if (!range) {
+        return null;
+    }
+
+
+    const low = range[0];
+
+    const high = range[1];
+
+
+    if (value < low) {
+
+        return "low";
+    }
+
+
+    if (
+        high !== Infinity &&
+        value > high
+    ) {
+
+        return "high";
+    }
+
+
+    return "good";
+}
+
+
+/* =========================================================
+   SUMMARY
    ========================================================= */
 
 function resetSummary() {
@@ -386,54 +702,64 @@ function resetSummary() {
     highCount = 0;
 
     warningCount = 0;
+}
 
-    abnormalResults = [];
 
+function addToSummary(
+    status
+) {
+
+    if (status === "good") {
+
+        goodCount++;
+
+    } else if (
+        status === "low"
+    ) {
+
+        lowCount++;
+
+    } else if (
+        status === "high"
+    ) {
+
+        highCount++;
+
+    } else if (
+        status === "warning"
+    ) {
+
+        warningCount++;
+    }
 }
 
 
 /* =========================================================
-   ADD RESULT
+   GET INPUT VALUE
    ========================================================= */
 
-function addToSummary(name, result) {
+function getInputValue(id) {
 
-    if (result === "Good") {
+    const element =
+        document.getElementById(id);
 
-        goodCount++;
 
+    if (
+        !element ||
+        element.value === ""
+    ) {
+
+        return null;
     }
 
-    else if (result === "Low") {
 
-        lowCount++;
+    const value =
+        Number(element.value);
 
-        abnormalResults.push(
-            name + " - Low"
-        );
 
-    }
-
-    else if (result === "High") {
-
-        highCount++;
-
-        abnormalResults.push(
-            name + " - High"
-        );
-
-    }
-
-    else if (result === "Warning") {
-
-        warningCount++;
-
-        abnormalResults.push(
-            name + " - Warning"
-        );
-
-    }
-
+    return Number.isFinite(value)
+        ? value
+        : null;
 }
 
 
@@ -442,69 +768,206 @@ function addToSummary(name, result) {
    ========================================================= */
 
 function showResult(
-    resultId,
-    rawValue,
-    low,
-    high,
-    name
+    id,
+    status,
+    text
 ) {
 
-    const resultElement =
-        document.getElementById(resultId);
-
-
-    if (rawValue === "") {
-
-        resultElement.textContent =
-            "Not Entered";
-
-        resultElement.className =
-            "result-box not-found";
-
-        return;
-
-    }
-
-
-    const value =
-        Number(rawValue);
-
-
-    if (isNaN(value)) {
-
-        resultElement.textContent =
-            "Not Entered";
-
-        resultElement.className =
-            "result-box not-found";
-
-        return;
-
-    }
-
-
-    const result =
-        checkRange(
-            value,
-            low,
-            high
+    const element =
+        document.getElementById(
+            id + "Result"
         );
 
 
-    resultElement.textContent =
-        result;
+    if (!element) {
+        return;
+    }
 
 
-    resultElement.className =
-        "result-box " +
-        result.toLowerCase();
+    element.className =
+        "result-box";
+
+
+    if (status) {
+
+        element.classList.add(
+            status
+        );
+    }
+
+
+    element.textContent =
+        text;
+}
+
+
+/* =========================================================
+   STANDARD TEST ANALYSIS
+   ========================================================= */
+
+function analyzeStandardTest(
+    test
+) {
+
+    const value =
+        getInputValue(
+            test.id
+        );
+
+
+    if (value === null) {
+
+        showResult(
+            test.id,
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    const range =
+        getTestRange(test);
+
+
+    if (!range) {
+
+        showResult(
+            test.id,
+            "warning",
+            "Select age/gender"
+        );
+
+        addToSummary(
+            "warning"
+        );
+
+        return "warning";
+    }
+
+
+    const status =
+        checkRange(
+            value,
+            range
+        );
+
+
+    if (status === "good") {
+
+        showResult(
+            test.id,
+            "good",
+            "Good"
+        );
+
+    } else if (
+        status === "low"
+    ) {
+
+        showResult(
+            test.id,
+            "low",
+            "Low"
+        );
+
+    } else if (
+        status === "high"
+    ) {
+
+        showResult(
+            test.id,
+            "high",
+            "High"
+        );
+    }
 
 
     addToSummary(
-        name,
-        result
+        status
     );
 
+
+    return status;
+}
+
+
+/* =========================================================
+   FASTING GLUCOSE
+   ========================================================= */
+
+function analyzeGlucose() {
+
+    const value =
+        getInputValue(
+            "glucose"
+        );
+
+
+    if (value === null) {
+
+        showResult(
+            "glucose",
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    if (value < 70) {
+
+        showResult(
+            "glucose",
+            "low",
+            "Low"
+        );
+
+        addToSummary("low");
+
+        return "low";
+    }
+
+
+    if (value <= 99) {
+
+        showResult(
+            "glucose",
+            "good",
+            "Normal"
+        );
+
+        addToSummary("good");
+
+        return "good";
+    }
+
+
+    if (value <= 125) {
+
+        showResult(
+            "glucose",
+            "warning",
+            "Prediabetes Range"
+        );
+
+        addToSummary("warning");
+
+        return "warning";
+    }
+
+
+    showResult(
+        "glucose",
+        "high",
+        "Diabetes Range"
+    );
+
+    addToSummary("high");
+
+    return "high";
 }
 
 
@@ -512,96 +975,491 @@ function showResult(
    HbA1c
    ========================================================= */
 
-function showHbA1cResult(rawValue) {
+function analyzeHbA1c() {
 
-    const element =
-        document.getElementById(
-            "hba1cResult"
+    const value =
+        getInputValue(
+            "hba1c"
         );
 
 
-    if (rawValue === "") {
+    if (value === null) {
 
-        element.textContent =
-            "Not Entered";
+        showResult(
+            "hba1c",
+            "",
+            "Not Entered"
+        );
 
-        element.className =
-            "result-box not-found";
-
-        return;
-
-    }
-
-
-    const value =
-        Number(rawValue);
-
-
-    if (isNaN(value)) {
-
-        element.textContent =
-            "Not Entered";
-
-        element.className =
-            "result-box not-found";
-
-        return;
-
+        return null;
     }
 
 
     if (value < 5.7) {
 
-        element.textContent =
-            "Good";
-
-        element.className =
-            "result-box good";
-
-        goodCount++;
-
-    }
-
-    else if (value < 6.5) {
-
-        element.textContent =
-            "Warning";
-
-        element.className =
-            "result-box warning";
-
-        warningCount++;
-
-        abnormalResults.push(
-            "HbA1c - Warning"
+        showResult(
+            "hba1c",
+            "good",
+            "Normal"
         );
 
+        addToSummary("good");
+
+        return "good";
     }
 
-    else {
 
-        element.textContent =
-            "High";
+    if (value < 6.5) {
 
-        element.className =
-            "result-box high";
-
-        highCount++;
-
-        abnormalResults.push(
-            "HbA1c - High"
+        showResult(
+            "hba1c",
+            "warning",
+            "Prediabetes Range"
         );
 
+        addToSummary("warning");
+
+        return "warning";
     }
 
+
+    showResult(
+        "hba1c",
+        "high",
+        "Diabetes Range"
+    );
+
+    addToSummary("high");
+
+    return "high";
 }
 
 
 /* =========================================================
-   SHOW SUMMARY
+   LDL
+   ========================================================= */
+
+function analyzeLDL() {
+
+    const value =
+        getInputValue(
+            "ldl"
+        );
+
+
+    if (value === null) {
+
+        showResult(
+            "ldl",
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    if (value < 100) {
+
+        showResult(
+            "ldl",
+            "good",
+            "General Target Met"
+        );
+
+        addToSummary("good");
+
+        return "good";
+    }
+
+
+    if (value < 160) {
+
+        showResult(
+            "ldl",
+            "warning",
+            "Above General Target"
+        );
+
+        addToSummary("warning");
+
+        return "warning";
+    }
+
+
+    showResult(
+        "ldl",
+        "high",
+        "High"
+    );
+
+    addToSummary("high");
+
+    return "high";
+}
+
+
+/* =========================================================
+   HDL
+   ========================================================= */
+
+function analyzeHDL() {
+
+    const value =
+        getInputValue(
+            "hdl"
+        );
+
+
+    if (value === null) {
+
+        showResult(
+            "hdl",
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    const gender =
+        getGender();
+
+
+    let lowLimit = 40;
+
+
+    if (
+        gender === "Female"
+    ) {
+
+        lowLimit = 50;
+    }
+
+
+    if (
+        value < lowLimit
+    ) {
+
+        showResult(
+            "hdl",
+            "low",
+            "Low"
+        );
+
+        addToSummary("low");
+
+        return "low";
+    }
+
+
+    showResult(
+        "hdl",
+        "good",
+        "Acceptable"
+    );
+
+    addToSummary("good");
+
+    return "good";
+}
+
+
+/* =========================================================
+   eGFR
+   ========================================================= */
+
+function analyzeEGFR() {
+
+    const value =
+        getInputValue(
+            "egfr"
+        );
+
+
+    if (value === null) {
+
+        showResult(
+            "egfr",
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    if (value >= 90) {
+
+        showResult(
+            "egfr",
+            "good",
+            "≥ 90"
+        );
+
+        addToSummary("good");
+
+        return "good";
+    }
+
+
+    if (value >= 60) {
+
+        showResult(
+            "egfr",
+            "warning",
+            "Below 90"
+        );
+
+        addToSummary("warning");
+
+        return "warning";
+    }
+
+
+    showResult(
+        "egfr",
+        "high",
+        "Low eGFR"
+    );
+
+    addToSummary("high");
+
+    return "high";
+}
+
+
+/* =========================================================
+   ESR
+   ========================================================= */
+
+function analyzeESR() {
+
+    const value =
+        getInputValue(
+            "esr"
+        );
+
+
+    if (value === null) {
+
+        showResult(
+            "esr",
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    const test =
+        tests.find(
+            item =>
+                item.id === "esr"
+        );
+
+
+    const range =
+        getTestRange(test);
+
+
+    if (!range) {
+
+        showResult(
+            "esr",
+            "warning",
+            "Select age/gender"
+        );
+
+        addToSummary("warning");
+
+        return "warning";
+    }
+
+
+    if (
+        value >= range[0] &&
+        value <= range[1]
+    ) {
+
+        showResult(
+            "esr",
+            "good",
+            "Within Range"
+        );
+
+        addToSummary("good");
+
+        return "good";
+    }
+
+
+    showResult(
+        "esr",
+        "high",
+        "Above Range"
+    );
+
+    addToSummary("high");
+
+    return "high";
+}
+
+
+/* =========================================================
+   URINE RESULT
+   ========================================================= */
+
+function showUrineResult(
+    id
+) {
+
+    const element =
+        document.getElementById(id);
+
+    if (
+        !element ||
+        element.value === ""
+    ) {
+
+        const result =
+            document.getElementById(
+                id + "Result"
+            );
+
+        if (result) {
+
+            result.className =
+                "result-box";
+
+            result.textContent =
+                "Not Entered";
+        }
+
+        return null;
+    }
+
+
+    const result =
+        document.getElementById(
+            id + "Result"
+        );
+
+
+    if (!result) {
+        return null;
+    }
+
+
+    result.className =
+        "result-box";
+
+
+    if (
+        element.value === "Negative"
+    ) {
+
+        result.classList.add(
+            "good"
+        );
+
+        result.textContent =
+            "Normal";
+
+        addToSummary("good");
+
+        return "good";
+    }
+
+
+    result.classList.add(
+        "warning"
+    );
+
+    result.textContent =
+        "Positive";
+
+    addToSummary("warning");
+
+    return "warning";
+}
+
+
+/* =========================================================
+   URINE NUMERIC RESULT
+   ========================================================= */
+
+function showUrineNumericResult(
+    id,
+    low,
+    high
+) {
+
+    const value =
+        getInputValue(id);
+
+
+    if (value === null) {
+
+        showResult(
+            id,
+            "",
+            "Not Entered"
+        );
+
+        return null;
+    }
+
+
+    if (
+        value >= low &&
+        value <= high
+    ) {
+
+        showResult(
+            id,
+            "good",
+            "Within Range"
+        );
+
+        addToSummary("good");
+
+        return "good";
+    }
+
+
+    showResult(
+        id,
+        "warning",
+        "Outside Common Range"
+    );
+
+    addToSummary("warning");
+
+    return "warning";
+}
+
+
+/* =========================================================
+   ANALYSIS SUMMARY
    ========================================================= */
 
 function showSummary() {
+
+    const summaryCard =
+        document.getElementById(
+            "analysisSummaryCard"
+        );
+
+
+    if (summaryCard) {
+
+        summaryCard.style.display =
+            "block";
+    }
+
 
     document.getElementById(
         "goodCount"
@@ -625,46 +1483,6 @@ function showSummary() {
         "warningCount"
     ).textContent =
         warningCount;
-
-
-    const list =
-        document.getElementById(
-            "abnormalList"
-        );
-
-
-    list.innerHTML = "";
-
-
-    if (abnormalResults.length === 0) {
-
-        const item =
-            document.createElement("li");
-
-        item.textContent =
-            "No abnormal results.";
-
-        list.appendChild(item);
-
-        return;
-
-    }
-
-
-    abnormalResults.forEach(
-        function(result) {
-
-            const item =
-                document.createElement("li");
-
-            item.textContent =
-                result;
-
-            list.appendChild(item);
-
-        }
-    );
-
 }
 
 
@@ -696,29 +1514,6 @@ function updateDashboard() {
         "dashboardWarning"
     ).textContent =
         warningCount;
-
-}
-
-
-/* =========================================================
-   INPUT VALUE
-   ========================================================= */
-
-function getInputValue(id) {
-
-    const element =
-        document.getElementById(id);
-
-
-    if (!element) {
-
-        return "";
-
-    }
-
-
-    return element.value.trim();
-
 }
 
 
@@ -728,113 +1523,391 @@ function getInputValue(id) {
 
 function generateOverallAssessment() {
 
-    const message =
+    const assessmentMessage =
         document.getElementById(
             "assessmentMessage"
         );
 
 
-    const category =
+    const categoryAssessment =
         document.getElementById(
             "categoryAssessment"
         );
 
 
-    const abnormal =
+    const total =
+        goodCount +
         lowCount +
         highCount +
         warningCount;
 
 
+    if (total === 0) {
+
+        assessmentMessage.textContent =
+            "No laboratory results were entered.";
+
+        categoryAssessment.textContent =
+            "Enter at least one result and analyze again.";
+
+        return;
+    }
+
+
     if (
-        goodCount === 0 &&
-        abnormal === 0
+        highCount > 0
     ) {
 
-        message.textContent =
-            "No laboratory values were entered.";
+        assessmentMessage.textContent =
+            "Some entered results are above the selected educational reference or decision threshold.";
 
-        category.textContent =
-            "Enter your test results and analyze them.";
+    } else if (
+        lowCount > 0
+    ) {
 
-        return;
+        assessmentMessage.textContent =
+            "Some entered results are below the selected educational reference range.";
 
+    } else if (
+        warningCount > 0
+    ) {
+
+        assessmentMessage.textContent =
+            "Some entered results require attention or additional clinical context.";
+
+    } else {
+
+        assessmentMessage.textContent =
+            "The entered results are within the educational ranges used by this project.";
     }
 
 
-    if (abnormal === 0) {
-
-        message.textContent =
-            "All entered results are within the selected reference ranges.";
-
-        category.textContent =
-            "No abnormal result was detected by this educational analyzer.";
-
-        return;
-
-    }
-
-
-    if (abnormal <= 2) {
-
-        message.textContent =
-            "A small number of entered results are outside the selected reference ranges.";
-
-        category.textContent =
-            "Review these results using the reference range printed by your laboratory.";
-
-        return;
-
-    }
-
-
-    message.textContent =
-        "Several entered results are outside the selected reference ranges.";
-
-    category.textContent =
-        "Multiple abnormal values were detected. The results should be reviewed with a qualified healthcare professional.";
-
+    categoryAssessment.textContent =
+        "This is an educational screening summary, not a medical diagnosis.";
 }
 
 
 /* =========================================================
-   LOW CHECK
+   ABNORMAL RESULTS
    ========================================================= */
 
-function hasLowResult(name) {
+function generateAbnormalResults() {
 
-    return abnormalResults.some(
-        function(result) {
+    const list =
+        document.getElementById(
+            "abnormalList"
+        );
 
-            return result ===
-                name + " - Low";
 
+    list.innerHTML = "";
+
+
+    const results = [];
+
+
+    tests.forEach(function(test) {
+
+        const value =
+            getInputValue(
+                test.id
+            );
+
+
+        if (value === null) {
+            return;
         }
-    );
 
+
+        let status = null;
+
+
+        if (
+            test.special ===
+            "fastingGlucose"
+        ) {
+
+            if (value < 70) {
+
+                status = "Low";
+
+            } else if (
+                value <= 99
+            ) {
+
+                status = null;
+
+            } else if (
+                value <= 125
+            ) {
+
+                status =
+                    "Prediabetes Range";
+
+            } else {
+
+                status =
+                    "Diabetes Range";
+            }
+
+        } else if (
+            test.special === "ldl"
+        ) {
+
+            if (value >= 100) {
+
+                status =
+                    value < 160
+                        ? "Above General Target"
+                        : "High";
+            }
+
+        } else if (
+            test.special === "hdl"
+        ) {
+
+            const gender =
+                getGender();
+
+            const limit =
+                gender === "Female"
+                    ? 50
+                    : 40;
+
+            if (value < limit) {
+
+                status = "Low";
+            }
+
+        } else if (
+            test.special === "egfr"
+        ) {
+
+            if (value < 90) {
+
+                status =
+                    value >= 60
+                        ? "Below 90"
+                        : "Low eGFR";
+            }
+
+        } else if (
+            test.special === "esr"
+        ) {
+
+            const range =
+                getTestRange(test);
+
+            if (
+                range &&
+                (
+                    value < range[0] ||
+                    value > range[1]
+                )
+            ) {
+
+                status =
+                    "Above/Outside Range";
+            }
+
+        } else {
+
+            const range =
+                getTestRange(test);
+
+
+            if (range) {
+
+                if (
+                    value < range[0]
+                ) {
+
+                    status = "Low";
+
+                } else if (
+                    range[1] !== Infinity &&
+                    value > range[1]
+                ) {
+
+                    status = "High";
+                }
+            }
+        }
+
+
+        if (status) {
+
+            results.push(
+                test.name +
+                ": " +
+                status +
+                " (" +
+                value +
+                " " +
+                test.unit +
+                ")"
+            );
+        }
+
+    });
+
+
+    /* HbA1c */
+
+    const hba1c =
+        getInputValue(
+            "hba1c"
+        );
+
+
+    if (hba1c !== null) {
+
+        if (hba1c >= 5.7) {
+
+            results.push(
+                "HbA1c: " +
+                (
+                    hba1c >= 6.5
+                        ? "Diabetes Range"
+                        : "Prediabetes Range"
+                ) +
+                " (" +
+                hba1c +
+                " %)"
+            );
+        }
+    }
+
+
+    /* Urine */
+
+    const urineTests = [
+        {
+            id: "urineProtein",
+            name: "Urine Protein"
+        },
+        {
+            id: "urineGlucose",
+            name: "Urine Glucose"
+        },
+        {
+            id: "urineBlood",
+            name: "Urine Blood"
+        },
+        {
+            id: "urineKetones",
+            name: "Urine Ketones"
+        }
+    ];
+
+
+    urineTests.forEach(function(item) {
+
+        const element =
+            document.getElementById(
+                item.id
+            );
+
+
+        if (
+            element &&
+            element.value === "Positive"
+        ) {
+
+            results.push(
+                item.name +
+                ": Positive"
+            );
+        }
+
+    });
+
+
+    /* Urine pH */
+
+    const urinePH =
+        getInputValue(
+            "urinePH"
+        );
+
+
+    if (
+        urinePH !== null &&
+        (
+            urinePH < 4.5 ||
+            urinePH > 8
+        )
+    ) {
+
+        results.push(
+            "Urine pH: Outside common range (" +
+            urinePH +
+            ")"
+        );
+    }
+
+
+    /* Specific Gravity */
+
+    const gravity =
+        getInputValue(
+            "urineSpecificGravity"
+        );
+
+
+    if (
+        gravity !== null &&
+        (
+            gravity < 1.005 ||
+            gravity > 1.030
+        )
+    ) {
+
+        results.push(
+            "Specific Gravity: Outside common range (" +
+            gravity +
+            ")"
+        );
+    }
+
+
+    if (results.length === 0) {
+
+        const item =
+            document.createElement(
+                "li"
+            );
+
+        item.textContent =
+            "No abnormal or warning results were identified.";
+
+        list.appendChild(
+            item
+        );
+
+        return;
+    }
+
+
+    results.forEach(function(text) {
+
+        const item =
+            document.createElement(
+                "li"
+            );
+
+        item.textContent =
+            text;
+
+        list.appendChild(
+            item
+        );
+
+    });
 }
 
 
 /* =========================================================
-   HIGH CHECK
-   ========================================================= */
-
-function hasHighResult(name) {
-
-    return abnormalResults.some(
-        function(result) {
-
-            return result ===
-                name + " - High";
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   FOOD RECOMMENDATIONS
+   RECOMMENDATIONS
    ========================================================= */
 
 function generateRecommendations() {
@@ -848,118 +1921,181 @@ function generateRecommendations() {
     list.innerHTML = "";
 
 
-    let recommendations = [];
+    const recommendations = [];
 
 
     if (
-        hasLowResult("Hemoglobin") ||
-        hasLowResult("Ferritin") ||
-        hasLowResult("Iron")
+        lowCount === 0 &&
+        highCount === 0 &&
+        warningCount === 0
     ) {
 
         recommendations.push(
-            "Consider iron-containing foods such as lean meat, beans, lentils and leafy green vegetables."
+            "Continue regular healthy habits and follow the reference ranges printed on your laboratory report."
         );
-
-    }
-
-
-    if (
-        hasLowResult("Vitamin D")
-    ) {
-
-        recommendations.push(
-            "Consider vitamin D food sources such as fortified foods, eggs and fatty fish."
-        );
-
     }
 
 
     if (
-        hasLowResult("Vitamin B12")
+        getInputValue(
+            "vitaminD"
+        ) !== null &&
+        getInputValue(
+            "vitaminD"
+        ) < 20
     ) {
 
         recommendations.push(
-            "Consider vitamin B12 sources such as eggs, dairy, fish or fortified foods."
+            "Vitamin D is below the educational threshold. Discuss the result with a healthcare professional before starting supplementation."
         );
-
     }
 
 
     if (
-        hasLowResult("Folate")
+        getInputValue(
+            "vitaminB12"
+        ) !== null &&
+        getInputValue(
+            "vitaminB12"
+        ) < 299
     ) {
 
         recommendations.push(
-            "Include leafy green vegetables, beans, lentils and fortified grains."
+            "Vitamin B12 is below the educational range. Consider discussing diet, absorption, medications, and supplementation with a healthcare professional."
         );
-
     }
 
 
     if (
-        hasLowResult("Magnesium")
+        getInputValue(
+            "ferritin"
+        ) !== null
     ) {
 
-        recommendations.push(
-            "Consider nuts, seeds, whole grains and leafy green vegetables."
-        );
+        const ferritin =
+            getInputValue(
+                "ferritin"
+            );
 
+        const range =
+            getTestRange(
+                tests.find(
+                    test =>
+                        test.id ===
+                        "ferritin"
+                )
+            );
+
+
+        if (
+            range &&
+            ferritin < range[0]
+        ) {
+
+            recommendations.push(
+                "Ferritin is below the selected reference range. Iron status should be interpreted together with CBC and other iron studies."
+            );
+        }
     }
 
 
     if (
-        hasHighResult("Glucose") ||
-        hasHighResult("HbA1c")
+        getInputValue(
+            "ldl"
+        ) !== null &&
+        getInputValue(
+            "ldl"
+        ) >= 100
     ) {
 
         recommendations.push(
-            "Reduce highly sugary foods and drinks and focus on balanced meals."
+            "LDL is above the general target used by this educational analyzer. Individual LDL goals depend on cardiovascular risk."
         );
-
     }
 
 
     if (
-        hasHighResult("Total Cholesterol") ||
-        hasHighResult("LDL") ||
-        hasHighResult("Triglycerides")
+        getInputValue(
+            "triglycerides"
+        ) !== null &&
+        getInputValue(
+            "triglycerides"
+        ) >= 150
     ) {
 
         recommendations.push(
-            "Focus on vegetables, whole grains, legumes and sources of unsaturated fats."
+            "Triglycerides are above the usual desirable threshold. Discuss the result with your healthcare professional, especially if repeated."
         );
-
     }
 
 
-    if (recommendations.length === 0) {
+    if (
+        getInputValue(
+            "glucose"
+        ) !== null &&
+        getInputValue(
+            "glucose"
+        ) >= 100
+    ) {
 
         recommendations.push(
-            "Maintain a balanced diet containing vegetables, fruits, whole grains, protein and healthy fats."
+            "Fasting glucose is above the normal screening range. Confirmation and clinical interpretation may be needed."
         );
-
-        recommendations.push(
-            "Maintain adequate hydration and regular physical activity."
-        );
-
     }
+
+
+    if (
+        getInputValue(
+            "hba1c"
+        ) !== null &&
+        getInputValue(
+            "hba1c"
+        ) >= 5.7
+    ) {
+
+        recommendations.push(
+            "HbA1c is in a prediabetes or diabetes range according to CDC screening thresholds; diagnosis should be confirmed and interpreted clinically."
+        );
+    }
+
+
+    if (
+        getInputValue(
+            "crp"
+        ) !== null &&
+        getInputValue(
+            "crp"
+        ) > 0.8
+    ) {
+
+        recommendations.push(
+            "CRP is above the common educational threshold. CRP is nonspecific and should be interpreted with symptoms and other clinical information."
+        );
+    }
+
+
+    recommendations.push(
+        "Use the laboratory report's own reference ranges whenever they differ from the ranges shown here."
+    );
 
 
     recommendations.forEach(
-        function(recommendation) {
+        function(text) {
 
             const item =
-                document.createElement("li");
+                document.createElement(
+                    "li"
+                );
 
             item.textContent =
-                recommendation;
+                text;
 
-            list.appendChild(item);
+            list.appendChild(
+                item
+            );
 
         }
     );
-
 }
 
 
@@ -969,291 +2105,521 @@ function generateRecommendations() {
 
 function generateMealPlan() {
 
-    const content =
+    const container =
         document.getElementById(
             "mealPlanContent"
         );
 
 
-    content.innerHTML = `
-
-        <div class="meal-item">
-
-            <strong>
-                Breakfast
-            </strong>
-
-            <p>
-                Eggs or yogurt, whole-grain bread,
-                fruit and water.
-            </p>
-
-        </div>
+    container.innerHTML = "";
 
 
-        <div class="meal-item">
-
-            <strong>
-                Lunch
-            </strong>
-
-            <p>
-                Chicken, fish or legumes with vegetables,
-                whole grains and water.
-            </p>
-
-        </div>
+    const meals = [];
 
 
-        <div class="meal-item">
-
-            <strong>
-                Dinner
-            </strong>
-
-            <p>
-                Lean protein, vegetables and a moderate
-                portion of whole grains.
-            </p>
-
-        </div>
-
-    `;
-
-}
+    const diet =
+        document.getElementById(
+            "diet"
+        ).value;
 
 
-/* =========================================================
-   URINE RESULTS
-   ========================================================= */
+    if (
+        getInputValue(
+            "vitaminD"
+        ) !== null &&
+        getInputValue(
+            "vitaminD"
+        ) < 20
+    ) {
 
-function analyzeUrine() {
+        meals.push(
+            "Vitamin D sources: consider fortified foods and appropriate dietary sources; supplementation should be discussed with a healthcare professional."
+        );
+    }
 
-    const urineTests = [
 
-        {
-            id: "urineProtein",
-            name: "Urine Protein"
-        },
+    if (
+        getInputValue(
+            "vitaminB12"
+        ) !== null &&
+        getInputValue(
+            "vitaminB12"
+        ) < 299
+    ) {
 
-        {
-            id: "urineGlucose",
-            name: "Urine Glucose"
-        },
+        if (
+            diet === "Vegan"
+        ) {
 
-        {
-            id: "urineBlood",
-            name: "Urine Blood"
-        },
+            meals.push(
+                "Vitamin B12: fortified foods or an appropriate B12 supplement may be important for vegan diets; discuss the amount with a healthcare professional."
+            );
 
-        {
-            id: "urineKetones",
-            name: "Urine Ketones"
+        } else {
+
+            meals.push(
+                "Vitamin B12 sources can include eggs, dairy, fish, meat, or fortified foods depending on dietary preference."
+            );
         }
+    }
 
-    ];
+
+    if (
+        getInputValue(
+            "ferritin"
+        ) !== null
+    ) {
+
+        const range =
+            getTestRange(
+                tests.find(
+                    test =>
+                        test.id ===
+                        "ferritin"
+                )
+            );
 
 
-    urineTests.forEach(
-        function(test) {
-
-            const value =
-                document.getElementById(
-                    test.id
-                ).value;
-
+        if (
+            range &&
+            getInputValue(
+                "ferritin"
+            ) < range[0]
+        ) {
 
             if (
-                value === "Positive"
+                diet === "Vegan" ||
+                diet === "Vegetarian"
             ) {
 
-                warningCount++;
-
-                abnormalResults.push(
-                    test.name + " - Positive"
+                meals.push(
+                    "Iron-rich plant foods: lentils, beans, chickpeas, spinach, and iron-fortified foods. Combining plant iron with vitamin C sources can support absorption."
                 );
 
+            } else {
+
+                meals.push(
+                    "Iron-rich foods may include lean meat, beans, lentils, spinach, and fortified foods. Discuss confirmed iron deficiency before taking iron supplements."
+                );
             }
+        }
+    }
+
+
+    if (
+        getInputValue(
+            "ldl"
+        ) !== null &&
+        getInputValue(
+            "ldl"
+        ) >= 100
+    ) {
+
+        meals.push(
+            "For general heart-healthy eating: emphasize vegetables, fruits, whole grains, legumes, nuts, and unsaturated fats while reducing saturated fat."
+        );
+    }
+
+
+    if (
+        getInputValue(
+            "triglycerides"
+        ) !== null &&
+        getInputValue(
+            "triglycerides"
+        ) >= 150
+    ) {
+
+        meals.push(
+            "For elevated triglycerides: emphasize vegetables, fiber-rich foods, whole foods, and limit excess added sugars and refined carbohydrates."
+        );
+    }
+
+
+    if (
+        meals.length === 0
+    ) {
+
+        meals.push(
+            "Balanced Meal Example: vegetables + whole grains + a protein source + fruit + water."
+        );
+
+        meals.push(
+            "This meal plan is general educational information and is not a therapeutic diet."
+        );
+    }
+
+
+    meals.forEach(
+        function(text) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "meal-item";
+
+            div.textContent =
+                text;
+
+            container.appendChild(
+                div
+            );
 
         }
     );
-
 }
 
 
 /* =========================================================
-   SAVE CURRENT TEST TO DATABASE
+   COLLECT DATA FOR BACKEND
    ========================================================= */
 
-async function saveCurrentTest() {
+function collectTestData() {
 
     const data = {
 
         user_id: userId,
 
         test_date:
-            document.getElementById("savedTestDate").value
-            || new Date().toLocaleString(),
+            document.getElementById(
+                "savedTestDate"
+            ).value ||
+            new Date()
+                .toISOString()
+                .split("T")[0],
 
-        age: document.getElementById("age").value,
-        gender: document.getElementById("gender").value,
-        diet: document.getElementById("diet").value,
+        age:
+            getInputValue(
+                "age"
+            ),
 
-        hemoglobin: document.getElementById("hemoglobin").value,
-        wbc: document.getElementById("wbc").value,
-        rbc: document.getElementById("rbc").value,
-        platelets: document.getElementById("platelets").value,
-        hematocrit: document.getElementById("hematocrit").value,
-        mcv: document.getElementById("mcv").value,
-        neutrophils: document.getElementById("neutrophils").value,
-        lymphocytes: document.getElementById("lymphocytes").value,
+        gender:
+            document.getElementById(
+                "gender"
+            ).value,
 
-        glucose: document.getElementById("glucose").value,
-        hba1c: document.getElementById("hba1c").value,
+        diet:
+            document.getElementById(
+                "diet"
+            ).value,
+
+        hemoglobin:
+            getInputValue(
+                "hemoglobin"
+            ),
+
+        wbc:
+            getInputValue(
+                "wbc"
+            ),
+
+        rbc:
+            getInputValue(
+                "rbc"
+            ),
+
+        platelets:
+            getInputValue(
+                "platelets"
+            ),
+
+        hematocrit:
+            getInputValue(
+                "hematocrit"
+            ),
+
+        mcv:
+            getInputValue(
+                "mcv"
+            ),
+
+        neutrophils:
+            getInputValue(
+                "neutrophils"
+            ),
+
+        lymphocytes:
+            getInputValue(
+                "lymphocytes"
+            ),
+
+        glucose:
+            getInputValue(
+                "glucose"
+            ),
+
+        hba1c:
+            getInputValue(
+                "hba1c"
+            ),
 
         total_cholesterol:
-            document.getElementById("totalCholesterol").value,
+            getInputValue(
+                "totalCholesterol"
+            ),
 
-        ldl: document.getElementById("ldl").value,
-        hdl: document.getElementById("hdl").value,
+        ldl:
+            getInputValue(
+                "ldl"
+            ),
+
+        hdl:
+            getInputValue(
+                "hdl"
+            ),
+
         triglycerides:
-            document.getElementById("triglycerides").value,
+            getInputValue(
+                "triglycerides"
+            ),
 
         creatinine:
-            document.getElementById("creatinine").value,
+            getInputValue(
+                "creatinine"
+            ),
 
-        bun: document.getElementById("bun").value,
-        egfr: document.getElementById("egfr").value,
+        bun:
+            getInputValue(
+                "bun"
+            ),
+
+        egfr:
+            getInputValue(
+                "egfr"
+            ),
 
         uric_acid:
-            document.getElementById("uricAcid").value,
+            getInputValue(
+                "uricAcid"
+            ),
 
-        alt: document.getElementById("alt").value,
-        ast: document.getElementById("ast").value,
-        alp: document.getElementById("alp").value,
+        alt:
+            getInputValue(
+                "alt"
+            ),
+
+        ast:
+            getInputValue(
+                "ast"
+            ),
+
+        alp:
+            getInputValue(
+                "alp"
+            ),
 
         bilirubin:
-            document.getElementById("bilirubin").value,
+            getInputValue(
+                "bilirubin"
+            ),
 
         albumin:
-            document.getElementById("albumin").value,
+            getInputValue(
+                "albumin"
+            ),
 
         total_protein:
-            document.getElementById("totalProtein").value,
+            getInputValue(
+                "totalProtein"
+            ),
 
-        tsh: document.getElementById("tsh").value,
+        tsh:
+            getInputValue(
+                "tsh"
+            ),
 
         free_t4:
-            document.getElementById("freeT4").value,
+            getInputValue(
+                "freeT4"
+            ),
 
         vitamin_d:
-            document.getElementById("vitaminD").value,
+            getInputValue(
+                "vitaminD"
+            ),
 
         vitamin_b12:
-            document.getElementById("vitaminB12").value,
+            getInputValue(
+                "vitaminB12"
+            ),
 
         folate:
-            document.getElementById("folate").value,
+            getInputValue(
+                "folate"
+            ),
 
         ferritin:
-            document.getElementById("ferritin").value,
+            getInputValue(
+                "ferritin"
+            ),
 
         iron:
-            document.getElementById("iron").value,
+            getInputValue(
+                "iron"
+            ),
 
         magnesium:
-            document.getElementById("magnesium").value,
+            getInputValue(
+                "magnesium"
+            ),
 
         calcium:
-            document.getElementById("calcium").value,
+            getInputValue(
+                "calcium"
+            ),
 
         phosphorus:
-            document.getElementById("phosphorus").value,
+            getInputValue(
+                "phosphorus"
+            ),
 
         crp:
-            document.getElementById("crp").value,
+            getInputValue(
+                "crp"
+            ),
 
         esr:
-            document.getElementById("esr").value,
+            getInputValue(
+                "esr"
+            ),
 
         urine_protein:
-            document.getElementById("urineProtein").value,
+            document.getElementById(
+                "urineProtein"
+            ).value,
 
         urine_glucose:
-            document.getElementById("urineGlucose").value,
+            document.getElementById(
+                "urineGlucose"
+            ).value,
 
         urine_blood:
-            document.getElementById("urineBlood").value,
+            document.getElementById(
+                "urineBlood"
+            ).value,
 
         urine_ketones:
-            document.getElementById("urineKetones").value,
+            document.getElementById(
+                "urineKetones"
+            ).value,
 
         urine_ph:
-            document.getElementById("urinePH").value,
+            getInputValue(
+                "urinePH"
+            ),
 
         urine_specific_gravity:
-            document.getElementById(
+            getInputValue(
                 "urineSpecificGravity"
-            ).value
+            )
     };
+
+
+    return data;
+}
+
+
+/* =========================================================
+   SAVE TEST
+   ========================================================= */
+
+async function saveCurrentTest() {
+
+    const saveMessage =
+        document.getElementById(
+            "saveMessage"
+        );
+
+
+    saveMessage.textContent =
+        "Saving test...";
 
 
     try {
 
-        const response = await fetch(
-            API_BASE_URL + "/api/tests",
-            {
-                method: "POST",
+        const data =
+            collectTestData();
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
 
-                body: JSON.stringify(data)
-            }
-        );
+        const response =
+            await fetch(
+                API_BASE_URL +
+                "/api/tests",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            data
+                        )
+                }
+            );
+
+
+        const result =
+            await response.json()
+                .catch(
+                    () => ({})
+                );
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Could not save test."
+                result.message ||
+                "Failed to save test."
             );
-
         }
 
 
-        const result =
-            await response.json();
-
-
-        document.getElementById(
-            "saveMessage"
-        ).textContent =
-            "Test saved successfully to the database. ID: "
-            + result.id;
+        saveMessage.textContent =
+            result.message ||
+            "Test saved successfully.";
 
 
         await displaySavedTests();
 
-    }
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
-        document.getElementById(
-            "saveMessage"
-        ).textContent =
-            "Error: Could not connect to the backend.";
 
+        saveMessage.textContent =
+            "Error saving test: " +
+            error.message;
     }
-
 }
 
 
 /* =========================================================
-   DISPLAY SAVED TESTS FROM DATABASE
+   DISPLAY SAVED TESTS
    ========================================================= */
+
+function displayValue(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return "Not entered";
+    }
+
+
+    return String(value);
+}
+
 
 async function displaySavedTests() {
 
@@ -1263,167 +2629,168 @@ async function displaySavedTests() {
         );
 
 
+    container.textContent =
+        "Loading saved tests...";
+
+
     try {
 
-        const response = await fetch(
-            API_BASE_URL + "/api/tests?user_id="
-            + encodeURIComponent(userId)
-        );
+        const response =
+            await fetch(
+                API_BASE_URL +
+                "/api/tests?user_id=" +
+                encodeURIComponent(
+                    userId
+                )
+            );
+
+
+        const testsData =
+            await response.json()
+                .catch(
+                    () => []
+                );
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Could not load saved tests."
+                "Failed to load saved tests."
             );
-
-        }
-
-
-        const savedTests =
-            await response.json();
-
-
-        if (
-            !Array.isArray(savedTests) ||
-            savedTests.length === 0
-        ) {
-
-            container.innerHTML =
-                "<p>No saved tests yet.</p>";
-
-            return;
-
         }
 
 
         container.innerHTML = "";
 
 
-        savedTests.forEach(
-            function(test, index) {
+        if (
+            !Array.isArray(
+                testsData
+            ) ||
+            testsData.length === 0
+        ) {
 
-                const div =
+            const empty =
+                document.createElement(
+                    "p"
+                );
+
+            empty.textContent =
+                "No saved tests yet.";
+
+            container.appendChild(
+                empty
+            );
+
+            return;
+        }
+
+
+        testsData.forEach(
+            function(test) {
+
+                const card =
                     document.createElement(
                         "div"
                     );
 
+                card.className =
+                    "saved-test-card";
 
-                div.className =
-                    "saved-test";
+
+                const title =
+                    document.createElement(
+                        "h3"
+                    );
+
+                title.textContent =
+                    "Test Date: " +
+                    displayValue(
+                        test.test_date
+                    );
 
 
-                div.innerHTML = `
+                const info =
+                    document.createElement(
+                        "p"
+                    );
 
-                    <strong>
-                        Test ${index + 1}
-                    </strong>
+                info.textContent =
+                    "Age: " +
+                    displayValue(
+                        test.age
+                    ) +
+                    " | Gender: " +
+                    displayValue(
+                        test.gender
+                    ) +
+                    " | Diet: " +
+                    displayValue(
+                        test.diet
+                    );
 
-                    <p>
-                        Date:
-                        ${displayValue(test.test_date)}
-                    </p>
 
-                    <p>
-                        Age:
-                        ${displayValue(test.age)}
-                    </p>
+                const values =
+                    document.createElement(
+                        "p"
+                    );
 
-                    <p>
-                        Gender:
-                        ${displayValue(test.gender)}
-                    </p>
+                values.textContent =
+                    "Hemoglobin: " +
+                    displayValue(
+                        test.hemoglobin
+                    ) +
+                    " | Glucose: " +
+                    displayValue(
+                        test.glucose
+                    ) +
+                    " | HbA1c: " +
+                    displayValue(
+                        test.hba1c
+                    );
 
-                    <p>
-                        Diet:
-                        ${displayValue(test.diet)}
-                    </p>
 
-                    <p>
-                        Hemoglobin:
-                        ${displayValue(test.hemoglobin)}
-                    </p>
+                card.appendChild(
+                    title
+                );
 
-                    <p>
-                        Glucose:
-                        ${displayValue(test.glucose)}
-                    </p>
+                card.appendChild(
+                    info
+                );
 
-                    <p>
-                        HbA1c:
-                        ${displayValue(test.hba1c)}
-                    </p>
-
-                    <p>
-                        Total Cholesterol:
-                        ${displayValue(test.total_cholesterol)}
-                    </p>
-
-                    <p>
-                        Vitamin D:
-                        ${displayValue(test.vitamin_d)}
-                    </p>
-
-                    <p>
-                        TSH:
-                        ${displayValue(test.tsh)}
-                    </p>
-
-                `;
+                card.appendChild(
+                    values
+                );
 
 
                 container.appendChild(
-                    div
+                    card
                 );
 
             }
         );
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
-        container.innerHTML =
-            "<p>Could not load saved tests from the database.</p>";
 
+        container.textContent =
+            "Error loading saved tests: " +
+            error.message;
     }
-
 }
 
 
 /* =========================================================
-   DISPLAY VALUE
-   ========================================================= */
-
-function displayValue(value) {
-
-    if (
-        value === undefined ||
-        value === null ||
-        value === ""
-    ) {
-
-        return "Not Entered";
-
-    }
-
-
-    return value;
-
-}
-
-
-/* =========================================================
-   DELETE ALL SAVED TESTS FROM DATABASE
+   DELETE SAVED TESTS
    ========================================================= */
 
 async function deleteSavedTests() {
 
     const confirmed =
-        confirm(
-            "Are you sure you want to delete all your saved tests?"
+        window.confirm(
+            "Are you sure you want to delete all saved tests?"
         );
 
 
@@ -1432,51 +2799,67 @@ async function deleteSavedTests() {
     }
 
 
+    const saveMessage =
+        document.getElementById(
+            "saveMessage"
+        );
+
+
     try {
 
-        const response = await fetch(
-            API_BASE_URL + "/api/tests?user_id="
-            + encodeURIComponent(userId),
-            {
-                method: "DELETE"
-            }
-        );
+        const response =
+            await fetch(
+                API_BASE_URL +
+                "/api/tests?user_id=" +
+                encodeURIComponent(
+                    userId
+                ),
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json()
+                .catch(
+                    () => ({})
+                );
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Could not delete saved tests."
+                result.message ||
+                "Failed to delete saved tests."
             );
-
         }
 
 
-        const result =
-            await response.json();
-
-
-        document.getElementById(
-            "saveMessage"
-        ).textContent =
-            result.message;
+        saveMessage.textContent =
+            result.message ||
+            "Saved tests deleted successfully.";
 
 
         await displaySavedTests();
 
-    }
 
-    catch (error) {
+        if (trendChart) {
+
+            trendChart.destroy();
+
+            trendChart = null;
+        }
+
+    } catch (error) {
 
         console.error(error);
 
-        document.getElementById(
-            "saveMessage"
-        ).textContent =
-            "Error: Could not delete your tests from the database.";
 
+        saveMessage.textContent =
+            "Error deleting tests: " +
+            error.message;
     }
-
 }
 
 
@@ -1484,33 +2867,99 @@ async function deleteSavedTests() {
    TREND TITLE
    ========================================================= */
 
-function getTrendTitle(name) {
+function getTrendTitle(
+    field
+) {
 
-    const test =
-        tests.find(
-            function(item) {
+    const titles = {
 
-                return item.id === name;
+        hemoglobin:
+            "Hemoglobin",
 
-            }
-        );
+        wbc:
+            "WBC",
+
+        rbc:
+            "RBC",
+
+        platelets:
+            "Platelets",
+
+        hematocrit:
+            "Hematocrit",
+
+        mcv:
+            "MCV",
+
+        glucose:
+            "Fasting Glucose",
+
+        hba1c:
+            "HbA1c",
+
+        total_cholesterol:
+            "Total Cholesterol",
+
+        ldl:
+            "LDL",
+
+        hdl:
+            "HDL",
+
+        triglycerides:
+            "Triglycerides",
+
+        creatinine:
+            "Creatinine",
+
+        bun:
+            "BUN",
+
+        egfr:
+            "eGFR",
+
+        uric_acid:
+            "Uric Acid",
+
+        alt:
+            "ALT",
+
+        ast:
+            "AST",
+
+        tsh:
+            "TSH",
+
+        free_t4:
+            "Free T4",
+
+        vitamin_d:
+            "Vitamin D",
+
+        vitamin_b12:
+            "Vitamin B12",
+
+        ferritin:
+            "Ferritin",
+
+        iron:
+            "Iron",
+
+        calcium:
+            "Calcium",
+
+        crp:
+            "CRP",
+
+        esr:
+            "ESR"
+    };
 
 
-    if (!test) {
-
-        if (name === "hba1c") {
-
-            return "HbA1c";
-
-        }
-
-        return name;
-
-    }
-
-
-    return test.name;
-
+    return (
+        titles[field] ||
+        field
+    );
 }
 
 
@@ -1518,43 +2967,109 @@ function getTrendTitle(name) {
    TREND UNIT
    ========================================================= */
 
-function getTrendUnit(name) {
+function getTrendUnit(
+    field
+) {
 
-    const test =
-        tests.find(
-            function(item) {
+    const units = {
 
-                return item.id === name;
+        hemoglobin:
+            "g/dL",
 
-            }
-        );
+        wbc:
+            "×10³/µL",
+
+        rbc:
+            "×10⁶/µL",
+
+        platelets:
+            "×10³/µL",
+
+        hematocrit:
+            "%",
+
+        mcv:
+            "fL",
+
+        glucose:
+            "mg/dL",
+
+        hba1c:
+            "%",
+
+        total_cholesterol:
+            "mg/dL",
+
+        ldl:
+            "mg/dL",
+
+        hdl:
+            "mg/dL",
+
+        triglycerides:
+            "mg/dL",
+
+        creatinine:
+            "mg/dL",
+
+        bun:
+            "mg/dL",
+
+        egfr:
+            "mL/min/1.73m²",
+
+        uric_acid:
+            "mg/dL",
+
+        alt:
+            "U/L",
+
+        ast:
+            "U/L",
+
+        tsh:
+            "mIU/L",
+
+        free_t4:
+            "ng/dL",
+
+        vitamin_d:
+            "ng/mL",
+
+        vitamin_b12:
+            "pg/mL",
+
+        ferritin:
+            "ng/mL",
+
+        iron:
+            "µg/dL",
+
+        calcium:
+            "mg/dL",
+
+        crp:
+            "mg/dL",
+
+        esr:
+            "mm/hr"
+    };
 
 
-    if (!test) {
-
-        if (name === "hba1c") {
-
-            return "%";
-
-        }
-
-        return "";
-
-    }
-
-
-    return test.unit;
-
+    return (
+        units[field] ||
+        ""
+    );
 }
 
 
 /* =========================================================
-   GENERATE TREND FROM DATABASE
+   GENERATE TREND
    ========================================================= */
 
 async function generateSelectedTrend() {
 
-    const selectedTest =
+    const field =
         document.getElementById(
             "trendTest"
         ).value;
@@ -1562,78 +3077,91 @@ async function generateSelectedTrend() {
 
     try {
 
-        const response = await fetch(
-            API_BASE_URL + "/api/tests?user_id="
-            + encodeURIComponent(userId)
-        );
+        const response =
+            await fetch(
+                API_BASE_URL +
+                "/api/tests?user_id=" +
+                encodeURIComponent(
+                    userId
+                )
+            );
+
+
+        const testsData =
+            await response.json()
+                .catch(
+                    () => []
+                );
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Could not load tests from database."
+                "Failed to load saved tests."
             );
-
         }
-
-
-        const savedTests =
-            await response.json();
 
 
         if (
-            !Array.isArray(savedTests) ||
-            savedTests.length === 0
+            !Array.isArray(
+                testsData
+            ) ||
+            testsData.length === 0
         ) {
 
             alert(
-                "Please save at least one test first."
+                "No saved tests available for the trend."
             );
 
             return;
-
         }
 
 
-        const labels = [];
-
-        const values = [];
-
-
-        savedTests.forEach(
-            function(test) {
-
-                const value =
-                    parseFloat(
-                        test[selectedTest]
-                    );
-
-
-                if (!isNaN(value)) {
-
-                    labels.push(
-                        test.test_date
-                    );
-
-                    values.push(
-                        value
-                    );
-
-                }
-
-            }
-        );
+        const validData =
+            testsData
+                .filter(
+                    item =>
+                        item[field] !== null &&
+                        item[field] !== undefined &&
+                        item[field] !== ""
+                )
+                .sort(
+                    (a, b) =>
+                        new Date(
+                            a.test_date
+                        ) -
+                        new Date(
+                            b.test_date
+                        )
+                );
 
 
-        if (values.length === 0) {
+        if (
+            validData.length === 0
+        ) {
 
             alert(
-                "No saved values are available for this test."
+                "No values are available for this test."
             );
 
             return;
-
         }
+
+
+        const labels =
+            validData.map(
+                item =>
+                    item.test_date
+            );
+
+
+        const values =
+            validData.map(
+                item =>
+                    Number(
+                        item[field]
+                    )
+            );
 
 
         const canvas =
@@ -1642,10 +3170,9 @@ async function generateSelectedTrend() {
             );
 
 
-        if (trendChart !== null) {
+        if (trendChart) {
 
             trendChart.destroy();
-
         }
 
 
@@ -1653,7 +3180,6 @@ async function generateSelectedTrend() {
             new Chart(
                 canvas,
                 {
-
                     type: "line",
 
                     data: {
@@ -1661,38 +3187,41 @@ async function generateSelectedTrend() {
                         labels: labels,
 
                         datasets: [
-
                             {
-
                                 label:
                                     getTrendTitle(
-                                        selectedTest
-                                    ),
+                                        field
+                                    ) +
+                                    " (" +
+                                    getTrendUnit(
+                                        field
+                                    ) +
+                                    ")",
 
                                 data: values,
 
+                                tension: 0.25,
+
                                 borderWidth: 3,
 
-                                tension: 0.3,
+                                pointRadius: 5,
 
                                 fill: false
-
                             }
-
                         ]
-
                     },
 
                     options: {
 
                         responsive: true,
 
+                        maintainAspectRatio:
+                            false,
+
                         plugins: {
 
                             legend: {
-
                                 display: true
-
                             }
 
                         },
@@ -1701,15 +3230,17 @@ async function generateSelectedTrend() {
 
                             y: {
 
+                                beginAtZero:
+                                    false,
+
                                 title: {
 
                                     display: true,
 
                                     text:
                                         getTrendUnit(
-                                            selectedTest
+                                            field
                                         )
-
                                 }
 
                             },
@@ -1722,7 +3253,6 @@ async function generateSelectedTrend() {
 
                                     text:
                                         "Test Date"
-
                                 }
 
                             }
@@ -1730,23 +3260,19 @@ async function generateSelectedTrend() {
                         }
 
                     }
-
                 }
-
             );
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 
+
         alert(
-            "Could not load saved tests from the database."
+            "Error generating trend: " +
+            error.message
         );
-
     }
-
 }
 
 
@@ -1759,73 +3285,179 @@ function analyzeResults() {
     resetSummary();
 
 
-    /* ================= NUMERIC TESTS ================= */
+    /* =====================================================
+       STANDARD TESTS
+       ===================================================== */
 
     tests.forEach(
         function(test) {
 
-            const rawValue =
-                getInputValue(
-                    test.id
-                );
+            if (
+                test.id === "glucose" ||
+                test.id === "ldl" ||
+                test.id === "hdl" ||
+                test.id === "egfr" ||
+                test.id === "esr"
+            ) {
+
+                return;
+            }
 
 
-            showResult(
-
-                test.id + "Result",
-
-                rawValue,
-
-                test.low,
-
-                test.high,
-
-                test.name
-
+            analyzeStandardTest(
+                test
             );
 
         }
     );
 
 
-    /* ================= HbA1c ================= */
+    /* =====================================================
+       SPECIAL TESTS
+       ===================================================== */
 
-    showHbA1cResult(
-        getInputValue("hba1c")
+    analyzeGlucose();
+
+    analyzeHbA1c();
+
+    analyzeLDL();
+
+    analyzeHDL();
+
+    analyzeEGFR();
+
+    analyzeESR();
+
+
+    /* =====================================================
+       URINALYSIS
+       ===================================================== */
+
+    showUrineResult(
+        "urineProtein"
+    );
+
+    showUrineResult(
+        "urineGlucose"
+    );
+
+    showUrineResult(
+        "urineBlood"
+    );
+
+    showUrineResult(
+        "urineKetones"
     );
 
 
-    /* ================= URINE ================= */
+    showUrineNumericResult(
+        "urinePH",
+        4.5,
+        8
+    );
 
-    analyzeUrine();
+
+    showUrineNumericResult(
+        "urineSpecificGravity",
+        1.005,
+        1.030
+    );
 
 
-    /* ================= SUMMARY ================= */
+    /* =====================================================
+       UPDATE UI
+       ===================================================== */
 
     showSummary();
 
-
     updateDashboard();
-
 
     generateOverallAssessment();
 
+    generateAbnormalResults();
 
     generateRecommendations();
 
-
     generateMealPlan();
 
+
+    /* =====================================================
+       SCROLL TO SUMMARY
+       ===================================================== */
+
+    const summaryCard =
+        document.getElementById(
+            "analysisSummaryCard"
+        );
+
+
+    if (summaryCard) {
+
+        setTimeout(
+            function() {
+
+                summaryCard.scrollIntoView(
+                    {
+                        behavior: "smooth",
+                        block: "start"
+                    }
+                );
+
+            },
+            100
+        );
+    }
 }
 
 
 /* =========================================================
-   PAGE LOAD
+   EVENT LISTENERS
    ========================================================= */
 
-window.onload = function() {
+window.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-    displaySavedTests();
+        updateReferenceRanges();
 
-};
-```
+        displaySavedTests();
+
+        const dateInput =
+            document.getElementById(
+                "savedTestDate"
+            );
+
+
+        if (
+            dateInput &&
+            !dateInput.value
+        ) {
+
+            dateInput.value =
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
+        }
+
+    }
+);
+
+
+/* =========================================================
+   UPDATE RANGES WHEN AGE/GENDER CHANGES
+   ========================================================= */
+
+document.addEventListener(
+    "change",
+    function(event) {
+
+        if (
+            event.target.id === "gender" ||
+            event.target.id === "age"
+        ) {
+
+            updateReferenceRanges();
+        }
+
+    }
+);

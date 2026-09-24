@@ -10,7 +10,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Comprehensive Health Check Analyzer</title>
+    <title>
+        Comprehensive Health Test Analyzer
+    </title>
 
     <link
         rel="stylesheet"
@@ -25,1778 +27,2042 @@
 <body>
 
 
-    <!-- ================= HEADER ================= -->
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
 
-    <header>
+<header class="main-header">
+
+    <div class="header-content">
 
         <h1>
-            Comprehensive Health Check Analyzer
+            Comprehensive Health Test Analyzer
         </h1>
 
         <p>
-            Comprehensive Blood Test Analysis & Assessment
+            Enter your laboratory test results and review an educational analysis.
         </p>
 
-    </header>
+    </div>
 
+</header>
 
-    <main>
 
+<main class="container">
 
-        <!-- ================= DASHBOARD ================= -->
 
-        <section class="dashboard">
+<!-- =====================================================
+     DASHBOARD
+     ===================================================== -->
 
-            <div class="dashboard-card good-card">
+<section class="card large-card">
 
-                <h3>Good</h3>
+    <h2>
+        Dashboard
+    </h2>
 
-                <p id="dashboardGood">
-                    0
-                </p>
+    <div class="dashboard-grid">
 
-            </div>
+        <div class="dashboard-box good-dashboard">
 
+            <span>
+                Good
+            </span>
 
-            <div class="dashboard-card low-card">
+            <strong id="dashboardGood">
+                0
+            </strong>
 
-                <h3>Low</h3>
+        </div>
 
-                <p id="dashboardLow">
-                    0
-                </p>
 
-            </div>
+        <div class="dashboard-box low-dashboard">
 
+            <span>
+                Low
+            </span>
 
-            <div class="dashboard-card high-card">
+            <strong id="dashboardLow">
+                0
+            </strong>
 
-                <h3>High</h3>
+        </div>
 
-                <p id="dashboardHigh">
-                    0
-                </p>
 
-            </div>
+        <div class="dashboard-box high-dashboard">
 
+            <span>
+                High
+            </span>
 
-            <div class="dashboard-card warning-card">
+            <strong id="dashboardHigh">
+                0
+            </strong>
 
-                <h3>Warning</h3>
+        </div>
 
-                <p id="dashboardWarning">
-                    0
-                </p>
 
-            </div>
+        <div class="dashboard-box warning-dashboard">
 
-        </section>
+            <span>
+                Warning
+            </span>
 
+            <strong id="dashboardWarning">
+                0
+            </strong>
 
+        </div>
 
-        <!-- ================= PERSONAL INFORMATION ================= -->
+    </div>
 
-        <section class="card">
+</section>
 
-            <h2>
-                Personal Information
-            </h2>
 
+<!-- =====================================================
+     PERSONAL INFORMATION
+     ===================================================== -->
 
-            <div class="form-grid">
+<section class="card large-card">
 
+    <h2>
+        Personal Information
+    </h2>
 
-                <div>
+    <div class="form-grid">
 
-                    <label for="age">
-                        Age
-                    </label>
 
-                    <input
-                        type="number"
-                        id="age"
-                        placeholder="Enter age"
-                        min="1"
-                        max="120"
-                    >
+        <div class="form-group">
 
-                </div>
+            <label for="age">
+                Age
+            </label>
 
-
-                <div>
-
-                    <label for="gender">
-                        Gender
-                    </label>
-
-                    <select id="gender">
-
-                        <option value="">
-                            Select Gender
-                        </option>
-
-                        <option value="Male">
-                            Male
-                        </option>
-
-                        <option value="Female">
-                            Female
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div>
-
-                    <label for="diet">
-                        Diet
-                    </label>
-
-                    <select id="diet">
-
-                        <option value="">
-                            Select Diet
-                        </option>
-
-                        <option value="Omnivore">
-                            Omnivore
-                        </option>
-
-                        <option value="Vegetarian">
-                            Vegetarian
-                        </option>
-
-                        <option value="Vegan">
-                            Vegan
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= CBC ================= -->
-
-        <section class="card">
-
-            <h2>
-                1. CBC - Complete Blood Count
-            </h2>
-
-            <p class="section-description">
-                Complete Blood Count measures important blood cell components.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        Hemoglobin
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 12 - 17.5 g/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="hemoglobin"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="hemoglobinResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        WBC
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 4 - 11 ×10³/µL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="wbc"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="wbcResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        RBC
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 4 - 6 ×10⁶/µL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="rbc"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="rbcResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Platelets
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 150 - 450 ×10³/µL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="platelets"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="plateletsResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Hematocrit
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 36 - 52 %
-                    </span>
-
-                    <input
-                        type="number"
-                        id="hematocrit"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="hematocritResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        MCV
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 80 - 100 fL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="mcv"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="mcvResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Neutrophils
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 40 - 70 %
-                    </span>
-
-                    <input
-                        type="number"
-                        id="neutrophils"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="neutrophilsResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Lymphocytes
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 20 - 40 %
-                    </span>
-
-                    <input
-                        type="number"
-                        id="lymphocytes"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="lymphocytesResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= DIABETES ================= -->
-
-        <section class="card">
-
-            <h2>
-                2. Diabetes & Blood Sugar
-            </h2>
-
-            <p class="section-description">
-                Blood glucose and HbA1c are commonly used to assess blood sugar.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        Fasting Blood Glucose
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 70 - 99 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="glucose"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="glucoseResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        HbA1c
-                    </label>
-
-                    <span class="range-text">
-                        Reference: Below 5.7 %
-                    </span>
-
-                    <input
-                        type="number"
-                        id="hba1c"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="hba1cResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= LIPID ================= -->
-
-        <section class="card">
-
-            <h2>
-                3. Lipid Profile
-            </h2>
-
-            <p class="section-description">
-                Cholesterol and triglyceride measurements are commonly used to assess cardiovascular risk.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        Total Cholesterol
-                    </label>
-
-                    <span class="range-text">
-                        Reference: Below 200 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="totalCholesterol"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="totalCholesterolResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        LDL
-                    </label>
-
-                    <span class="range-text">
-                        Reference: Below 100 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="ldl"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="ldlResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        HDL
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 40 - 100 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="hdl"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="hdlResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Triglycerides
-                    </label>
-
-                    <span class="range-text">
-                        Reference: Below 150 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="triglycerides"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="triglyceridesResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= KIDNEY ================= -->
-
-        <section class="card">
-
-            <h2>
-                4. Kidney Function
-            </h2>
-
-            <p class="section-description">
-                Common laboratory markers used to assess kidney function.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        Creatinine
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 0.6 - 1.3 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="creatinine"
-                        placeholder="Enter value"
-                        step="0.01"
-                    >
-
-                    <div
-                        id="creatinineResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        BUN
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 7 - 20 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="bun"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="bunResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        eGFR
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 90+ mL/min/1.73m²
-                    </span>
-
-                    <input
-                        type="number"
-                        id="egfr"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="egfrResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Uric Acid
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 3.5 - 7.2 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="uricAcid"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="uricAcidResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= LIVER ================= -->
-
-        <section class="card">
-
-            <h2>
-                5. Liver Function
-            </h2>
-
-            <p class="section-description">
-                Common blood tests related to liver function.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        ALT
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 7 - 56 U/L
-                    </span>
-
-                    <input
-                        type="number"
-                        id="alt"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="altResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        AST
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 10 - 40 U/L
-                    </span>
-
-                    <input
-                        type="number"
-                        id="ast"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="astResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        ALP
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 44 - 147 U/L
-                    </span>
-
-                    <input
-                        type="number"
-                        id="alp"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="alpResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Total Bilirubin
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 0.1 - 1.2 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="bilirubin"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="bilirubinResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Albumin
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 3.5 - 5.0 g/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="albumin"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="albuminResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Total Protein
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 6.0 - 8.3 g/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="totalProtein"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="totalProteinResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= THYROID ================= -->
-
-        <section class="card">
-
-            <h2>
-                6. Thyroid Function
-            </h2>
-
-            <p class="section-description">
-                Common thyroid screening tests.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        TSH
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 0.4 - 4.0 mIU/L
-                    </span>
-
-                    <input
-                        type="number"
-                        id="tsh"
-                        placeholder="Enter value"
-                        step="0.01"
-                    >
-
-                    <div
-                        id="tshResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Free T4
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 0.8 - 1.8 ng/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="freeT4"
-                        placeholder="Enter value"
-                        step="0.01"
-                    >
-
-                    <div
-                        id="freeT4Result"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= VITAMINS ================= -->
-
-        <section class="card">
-
-            <h2>
-                7. Vitamins, Minerals & Iron
-            </h2>
-
-            <p class="section-description">
-                Common nutritional tests that may be included in expanded health screening packages.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        Vitamin D
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 30 - 100 ng/mL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="vitaminD"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="vitaminDResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Vitamin B12
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 200 - 900 pg/mL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="vitaminB12"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="vitaminB12Result"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Folate / Vitamin B9
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 4 - 20 ng/mL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="folate"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="folateResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Ferritin
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 20 - 300 ng/mL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="ferritin"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="ferritinResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Iron
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 60 - 170 µg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="iron"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="ironResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Magnesium
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 1.7 - 2.2 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="magnesium"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="magnesiumResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Calcium
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 8.5 - 10.5 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="calcium"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="calciumResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        Phosphorus
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 2.5 - 4.5 mg/dL
-                    </span>
-
-                    <input
-                        type="number"
-                        id="phosphorus"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="phosphorusResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= INFLAMMATION ================= -->
-
-        <section class="card">
-
-            <h2>
-                8. Inflammation & Other Tests
-            </h2>
-
-            <p class="section-description">
-                Additional tests that may be included depending on the health screening package.
-            </p>
-
-
-            <div class="test-grid">
-
-
-                <div class="test-item">
-
-                    <label>
-                        CRP
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 0 - 5 mg/L
-                    </span>
-
-                    <input
-                        type="number"
-                        id="crp"
-                        placeholder="Enter value"
-                        step="0.1"
-                    >
-
-                    <div
-                        id="crpResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-
-                <div class="test-item">
-
-                    <label>
-                        ESR
-                    </label>
-
-                    <span class="range-text">
-                        Reference: 0 - 20 mm/hr
-                    </span>
-
-                    <input
-                        type="number"
-                        id="esr"
-                        placeholder="Enter value"
-                    >
-
-                    <div
-                        id="esrResult"
-                        class="result-box not-found"
-                    >
-                        Not Entered
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= URINALYSIS ================= -->
-
-        <section class="card">
-
-            <h2>
-                9. Urinalysis
-            </h2>
-
-            <p class="section-description">
-                Common urine screening results.
-            </p>
-
-
-            <div class="urine-grid">
-
-
-                <div class="urine-item">
-
-                    <label>
-                        Protein
-                    </label>
-
-                    <select id="urineProtein">
-
-                        <option value="Not Entered">
-                            Not Entered
-                        </option>
-
-                        <option value="Negative">
-                            Negative
-                        </option>
-
-                        <option value="Positive">
-                            Positive
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="urine-item">
-
-                    <label>
-                        Glucose
-                    </label>
-
-                    <select id="urineGlucose">
-
-                        <option value="Not Entered">
-                            Not Entered
-                        </option>
-
-                        <option value="Negative">
-                            Negative
-                        </option>
-
-                        <option value="Positive">
-                            Positive
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="urine-item">
-
-                    <label>
-                        Blood
-                    </label>
-
-                    <select id="urineBlood">
-
-                        <option value="Not Entered">
-                            Not Entered
-                        </option>
-
-                        <option value="Negative">
-                            Negative
-                        </option>
-
-                        <option value="Positive">
-                            Positive
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="urine-item">
-
-                    <label>
-                        Ketones
-                    </label>
-
-                    <select id="urineKetones">
-
-                        <option value="Not Entered">
-                            Not Entered
-                        </option>
-
-                        <option value="Negative">
-                            Negative
-                        </option>
-
-                        <option value="Positive">
-                            Positive
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="urine-item">
-
-                    <label>
-                        pH
-                    </label>
-
-                    <input
-                        type="number"
-                        id="urinePH"
-                        placeholder="4.5 - 8.0"
-                        step="0.1"
-                    >
-
-                </div>
-
-
-                <div class="urine-item">
-
-                    <label>
-                        Specific Gravity
-                    </label>
-
-                    <input
-                        type="number"
-                        id="urineSpecificGravity"
-                        placeholder="1.005 - 1.030"
-                        step="0.001"
-                    >
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= ANALYZE ================= -->
-
-        <section class="analyze-section">
-
-            <button
-                class="analyze-button"
-                onclick="analyzeResults()"
+            <input
+                type="number"
+                id="age"
+                placeholder="Enter age"
+                min="1"
+                max="120"
             >
-                Analyze Results
-            </button>
 
-        </section>
+        </div>
 
 
+        <div class="form-group">
 
-        <!-- ================= SUMMARY ================= -->
+            <label for="gender">
+                Gender
+            </label>
 
-        <section class="card">
+            <select id="gender">
 
-            <h2>
-                Analysis Summary
-            </h2>
+                <option value="">
+                    Select
+                </option>
 
+                <option value="Male">
+                    Male
+                </option>
 
-            <div class="summary-grid">
+                <option value="Female">
+                    Female
+                </option>
 
+            </select>
 
-                <div class="summary-box good-summary">
+        </div>
 
-                    <h3>
-                        Good
-                    </h3>
 
-                    <p id="goodCount">
-                        0
-                    </p>
+        <div class="form-group">
 
-                </div>
+            <label for="diet">
+                Diet
+            </label>
 
+            <select id="diet">
 
-                <div class="summary-box low-summary">
+                <option value="">
+                    Select
+                </option>
 
-                    <h3>
-                        Low
-                    </h3>
+                <option value="Regular">
+                    Regular
+                </option>
 
-                    <p id="lowCount">
-                        0
-                    </p>
+                <option value="Vegetarian">
+                    Vegetarian
+                </option>
 
-                </div>
+                <option value="Vegan">
+                    Vegan
+                </option>
 
+            </select>
 
-                <div class="summary-box high-summary">
+        </div>
 
-                    <h3>
-                        High
-                    </h3>
 
-                    <p id="highCount">
-                        0
-                    </p>
-
-                </div>
-
-
-                <div class="summary-box warning-summary">
-
-                    <h3>
-                        Warning
-                    </h3>
-
-                    <p id="warningCount">
-                        0
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="abnormal-section">
-
-                <h3>
-                    Abnormal Results
-                </h3>
-
-                <ul id="abnormalList">
-
-                    <li>
-                        No analysis yet.
-                    </li>
-
-                </ul>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= ASSESSMENT ================= -->
-
-        <section class="card">
-
-            <h2>
-                Overall Assessment
-            </h2>
-
-
-            <div
-                id="assessmentMessage"
-                class="assessment-message"
-            >
-                Please analyze your results first.
-            </div>
-
-
-            <div
-                id="categoryAssessment"
-                class="category-assessment"
-            >
-                No assessment available.
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= FOOD ================= -->
-
-        <section class="card">
-
-            <h2>
-                Food Recommendations
-            </h2>
-
-
-            <ul id="recommendationList">
-
-                <li>
-                    Analyze your results to receive recommendations.
-                </li>
-
-            </ul>
-
-        </section>
-
-
-
-        <!-- ================= MEAL PLAN ================= -->
-
-        <section class="card">
-
-            <h2>
-                Simple Meal Plan
-            </h2>
-
-
-            <div id="mealPlanContent">
-
-                <p>
-                    Analyze your results to generate a meal plan.
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= SAVE TEST ================= -->
-
-        <section class="card">
-
-            <h2>
-                Save Current Test
-            </h2>
-
+        <div class="form-group">
 
             <label for="savedTestDate">
                 Test Date
             </label>
-
 
             <input
                 type="date"
                 id="savedTestDate"
             >
 
+        </div>
 
-            <button
-                class="secondary-button"
-                onclick="saveCurrentTest()"
-            >
-                Save Test
-            </button>
+    </div>
+
+</section>
 
 
-            <p id="saveMessage"></p>
+<!-- =====================================================
+     CBC
+     ===================================================== -->
 
-        </section>
+<section class="card large-card">
 
+    <h2>
+        Complete Blood Count (CBC)
+    </h2>
 
-
-        <!-- ================= SAVED TESTS ================= -->
-
-        <section class="card">
-
-            <h2>
-                Saved Tests
-            </h2>
+    <div class="test-grid">
 
 
-            <div id="savedTestsList">
+        <div class="test-card">
 
-                <p>
-                    No saved tests yet.
-                </p>
+            <label for="hemoglobin">
 
-            </div>
+                Hemoglobin
 
+                <span
+                    class="reference-range"
+                    id="hemoglobinRange"
+                ></span>
 
-            <button
-                class="delete-button"
-                onclick="deleteSavedTests()"
-            >
-                Delete All Saved Tests
-            </button>
-
-        </section>
-
-
-
-        <!-- ================= TREND ================= -->
-
-        <section class="card">
-
-            <h2>
-                Test Trend
-            </h2>
-
-
-            <p class="section-description">
-                Track selected test results across saved tests.
-            </p>
-
-
-            <label for="trendTest">
-                Select Test
             </label>
 
+            <input
+                type="number"
+                step="any"
+                id="hemoglobin"
+                placeholder="g/dL"
+            >
 
-            <select id="trendTest">
+            <div
+                id="hemoglobinResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
 
-                <option value="vitaminD">
-                    Vitamin D
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="wbc">
+
+                WBC
+
+                <span
+                    class="reference-range"
+                    id="wbcRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="wbc"
+                placeholder="×10³/µL"
+            >
+
+            <div
+                id="wbcResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="rbc">
+
+                RBC
+
+                <span
+                    class="reference-range"
+                    id="rbcRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="rbc"
+                placeholder="×10⁶/µL"
+            >
+
+            <div
+                id="rbcResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="platelets">
+
+                Platelets
+
+                <span
+                    class="reference-range"
+                    id="plateletsRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="platelets"
+                placeholder="×10³/µL"
+            >
+
+            <div
+                id="plateletsResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="hematocrit">
+
+                Hematocrit
+
+                <span
+                    class="reference-range"
+                    id="hematocritRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="hematocrit"
+                placeholder="%"
+            >
+
+            <div
+                id="hematocritResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="mcv">
+
+                MCV
+
+                <span
+                    class="reference-range"
+                    id="mcvRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="mcv"
+                placeholder="fL"
+            >
+
+            <div
+                id="mcvResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="neutrophils">
+
+                Neutrophils
+
+                <span
+                    class="reference-range"
+                    id="neutrophilsRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="neutrophils"
+                placeholder="%"
+            >
+
+            <div
+                id="neutrophilsResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="lymphocytes">
+
+                Lymphocytes
+
+                <span
+                    class="reference-range"
+                    id="lymphocytesRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="lymphocytes"
+                placeholder="%"
+            >
+
+            <div
+                id="lymphocytesResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DIABETES
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Diabetes
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="glucose">
+
+                Fasting Blood Glucose
+
+                <span
+                    class="reference-range"
+                    id="glucoseRange"
+                >
+                Normal: &lt; 100 mg/dL
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="glucose"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="glucoseResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="hba1c">
+
+                HbA1c
+
+                <span
+                    class="reference-range"
+                    id="hba1cRange"
+                >
+                Normal: &lt; 5.7%
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="hba1c"
+                placeholder="%"
+            >
+
+            <div
+                id="hba1cResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     LIPID PROFILE
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Lipid Profile
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="totalCholesterol">
+
+                Total Cholesterol
+
+                <span
+                    class="reference-range"
+                    id="totalCholesterolRange"
+                >
+                Desirable: &lt; 200 mg/dL
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="totalCholesterol"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="totalCholesterolResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="ldl">
+
+                LDL
+
+                <span
+                    class="reference-range"
+                    id="ldlRange"
+                >
+                General target: &lt; 100 mg/dL
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="ldl"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="ldlResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="hdl">
+
+                HDL
+
+                <span
+                    class="reference-range"
+                    id="hdlRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="hdl"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="hdlResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="triglycerides">
+
+                Triglycerides
+
+                <span
+                    class="reference-range"
+                    id="triglyceridesRange"
+                >
+                Normal: &lt; 150 mg/dL
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="triglycerides"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="triglyceridesResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     KIDNEY FUNCTION
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Kidney Function
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="creatinine">
+
+                Creatinine
+
+                <span
+                    class="reference-range"
+                    id="creatinineRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="creatinine"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="creatinineResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="bun">
+
+                BUN
+
+                <span
+                    class="reference-range"
+                    id="bunRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="bun"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="bunResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="egfr">
+
+                eGFR
+
+                <span
+                    class="reference-range"
+                    id="egfrRange"
+                >
+                Common reference: ≥ 90
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="egfr"
+                placeholder="mL/min/1.73m²"
+            >
+
+            <div
+                id="egfrResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="uricAcid">
+
+                Uric Acid
+
+                <span
+                    class="reference-range"
+                    id="uricAcidRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="uricAcid"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="uricAcidResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     LIVER FUNCTION
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Liver Function
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="alt">
+
+                ALT
+
+                <span
+                    class="reference-range"
+                    id="altRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="alt"
+                placeholder="U/L"
+            >
+
+            <div
+                id="altResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="ast">
+
+                AST
+
+                <span
+                    class="reference-range"
+                    id="astRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="ast"
+                placeholder="U/L"
+            >
+
+            <div
+                id="astResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="alp">
+
+                ALP
+
+                <span
+                    class="reference-range"
+                    id="alpRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="alp"
+                placeholder="U/L"
+            >
+
+            <div
+                id="alpResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="bilirubin">
+
+                Total Bilirubin
+
+                <span
+                    class="reference-range"
+                    id="bilirubinRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="bilirubin"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="bilirubinResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="albumin">
+
+                Albumin
+
+                <span
+                    class="reference-range"
+                    id="albuminRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="albumin"
+                placeholder="g/dL"
+            >
+
+            <div
+                id="albuminResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="totalProtein">
+
+                Total Protein
+
+                <span
+                    class="reference-range"
+                    id="totalProteinRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="totalProtein"
+                placeholder="g/dL"
+            >
+
+            <div
+                id="totalProteinResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     THYROID
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Thyroid
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="tsh">
+
+                TSH
+
+                <span
+                    class="reference-range"
+                    id="tshRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="tsh"
+                placeholder="mIU/L"
+            >
+
+            <div
+                id="tshResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="freeT4">
+
+                Free T4
+
+                <span
+                    class="reference-range"
+                    id="freeT4Range"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="freeT4"
+                placeholder="ng/dL"
+            >
+
+            <div
+                id="freeT4Result"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     VITAMINS & MINERALS
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Vitamins & Minerals
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="vitaminD">
+
+                Vitamin D
+
+                <span
+                    class="reference-range"
+                    id="vitaminDRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="vitaminD"
+                placeholder="ng/mL"
+            >
+
+            <div
+                id="vitaminDResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="vitaminB12">
+
+                Vitamin B12
+
+                <span
+                    class="reference-range"
+                    id="vitaminB12Range"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="vitaminB12"
+                placeholder="pg/mL"
+            >
+
+            <div
+                id="vitaminB12Result"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="folate">
+
+                Folate
+
+                <span
+                    class="reference-range"
+                    id="folateRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="folate"
+                placeholder="ng/mL"
+            >
+
+            <div
+                id="folateResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="ferritin">
+
+                Ferritin
+
+                <span
+                    class="reference-range"
+                    id="ferritinRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="ferritin"
+                placeholder="ng/mL"
+            >
+
+            <div
+                id="ferritinResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="iron">
+
+                Iron
+
+                <span
+                    class="reference-range"
+                    id="ironRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="iron"
+                placeholder="µg/dL"
+            >
+
+            <div
+                id="ironResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="magnesium">
+
+                Magnesium
+
+                <span
+                    class="reference-range"
+                    id="magnesiumRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="magnesium"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="magnesiumResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="calcium">
+
+                Calcium
+
+                <span
+                    class="reference-range"
+                    id="calciumRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="calcium"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="calciumResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="phosphorus">
+
+                Phosphorus
+
+                <span
+                    class="reference-range"
+                    id="phosphorusRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="phosphorus"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="phosphorusResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     INFLAMMATION
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Inflammation
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="crp">
+
+                CRP
+
+                <span
+                    class="reference-range"
+                    id="crpRange"
+                >
+                Common: &lt; 0.8 mg/dL
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="crp"
+                placeholder="mg/dL"
+            >
+
+            <div
+                id="crpResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="esr">
+
+                ESR
+
+                <span
+                    class="reference-range"
+                    id="esrRange"
+                ></span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="esr"
+                placeholder="mm/hr"
+            >
+
+            <div
+                id="esrResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     URINALYSIS
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Urinalysis
+    </h2>
+
+    <div class="test-grid">
+
+
+        <div class="test-card">
+
+            <label for="urineProtein">
+
+                Urine Protein
+
+                <span class="reference-range">
+                    Normal: Negative
+                </span>
+
+            </label>
+
+            <select id="urineProtein">
+
+                <option value="">
+                    Select
                 </option>
 
-                <option value="hemoglobin">
-                    Hemoglobin
+                <option value="Negative">
+                    Negative
                 </option>
 
-                <option value="glucose">
-                    Glucose
-                </option>
-
-                <option value="hba1c">
-                    HbA1c
-                </option>
-
-                <option value="totalCholesterol">
-                    Total Cholesterol
-                </option>
-
-                <option value="ldl">
-                    LDL
-                </option>
-
-                <option value="creatinine">
-                    Creatinine
-                </option>
-
-                <option value="tsh">
-                    TSH
-                </option>
-
-                <option value="vitaminB12">
-                    Vitamin B12
-                </option>
-
-                <option value="ferritin">
-                    Ferritin
+                <option value="Positive">
+                    Positive
                 </option>
 
             </select>
 
-
-            <button
-                class="secondary-button"
-                onclick="generateSelectedTrend()"
+            <div
+                id="urineProteinResult"
+                class="result-box"
             >
-                Show Trend
-            </button>
-
-
-            <div class="trend-container">
-
-                <canvas id="trendChart"></canvas>
-
+                Not Entered
             </div>
 
-        </section>
+        </div>
 
 
-    </main>
+        <div class="test-card">
+
+            <label for="urineGlucose">
+
+                Urine Glucose
+
+                <span class="reference-range">
+                    Normal: Negative
+                </span>
+
+            </label>
+
+            <select id="urineGlucose">
+
+                <option value="">
+                    Select
+                </option>
+
+                <option value="Negative">
+                    Negative
+                </option>
+
+                <option value="Positive">
+                    Positive
+                </option>
+
+            </select>
+
+            <div
+                id="urineGlucoseResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
 
 
+        <div class="test-card">
 
-    <!-- ================= FOOTER ================= -->
+            <label for="urineBlood">
 
-    <footer>
+                Urine Blood
+
+                <span class="reference-range">
+                    Normal: Negative
+                </span>
+
+            </label>
+
+            <select id="urineBlood">
+
+                <option value="">
+                    Select
+                </option>
+
+                <option value="Negative">
+                    Negative
+                </option>
+
+                <option value="Positive">
+                    Positive
+                </option>
+
+            </select>
+
+            <div
+                id="urineBloodResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="urineKetones">
+
+                Urine Ketones
+
+                <span class="reference-range">
+                    Normal: Negative
+                </span>
+
+            </label>
+
+            <select id="urineKetones">
+
+                <option value="">
+                    Select
+                </option>
+
+                <option value="Negative">
+                    Negative
+                </option>
+
+                <option value="Positive">
+                    Positive
+                </option>
+
+            </select>
+
+            <div
+                id="urineKetonesResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="urinePH">
+
+                Urine pH
+
+                <span class="reference-range">
+                    Common: 4.5 - 8.0
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="any"
+                id="urinePH"
+                placeholder="pH"
+            >
+
+            <div
+                id="urinePHResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+
+        <div class="test-card">
+
+            <label for="urineSpecificGravity">
+
+                Specific Gravity
+
+                <span class="reference-range">
+                    1.005 - 1.030
+                </span>
+
+            </label>
+
+            <input
+                type="number"
+                step="0.001"
+                id="urineSpecificGravity"
+                placeholder="1.005 - 1.030"
+            >
+
+            <div
+                id="urineSpecificGravityResult"
+                class="result-box"
+            >
+                Not Entered
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ACTION BUTTONS
+     ===================================================== -->
+
+
+<section class="action-card">
+
+    <div class="action-buttons">
+
+        <button
+            class="danger-button"
+            onclick="deleteSavedTests()"
+        >
+            Delete Saved Tests
+        </button>
+
+
+        <button
+            class="primary-button analyze-button"
+            onclick="analyzeResults()"
+        >
+            Analyze Results
+        </button>
+
+
+        <button
+            class="secondary-button"
+            onclick="saveCurrentTest()"
+        >
+            Save Test
+        </button>
+
+    </div>
+
+
+    <p id="saveMessage"></p>
+
+</section>
+
+
+<!-- =====================================================
+     ANALYSIS SUMMARY
+     Hidden until Analyze Results
+     ===================================================== -->
+
+<section
+    class="card large-card"
+    id="analysisSummaryCard"
+    style="display: none;"
+>
+
+    <h2>
+        Analysis Summary
+    </h2>
+
+    <div class="summary-grid">
+
+        <div class="summary-box good">
+
+            <span>
+                Good
+            </span>
+
+            <strong id="goodCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="summary-box low">
+
+            <span>
+                Low
+            </span>
+
+            <strong id="lowCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="summary-box high">
+
+            <span>
+                High
+            </span>
+
+            <strong id="highCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="summary-box warning">
+
+            <span>
+                Warning
+            </span>
+
+            <strong id="warningCount">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     OVERALL ASSESSMENT
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Overall Assessment
+    </h2>
+
+    <div class="assessment-box">
+
+        <p id="assessmentMessage">
+            Enter your results and click Analyze Results.
+        </p>
+
+        <p id="categoryAssessment">
+            Educational assessment only.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABNORMAL RESULTS
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Abnormal Results
+    </h2>
+
+    <ul id="abnormalList">
+
+        <li>
+            No analysis performed yet.
+        </li>
+
+    </ul>
+
+</section>
+
+
+<!-- =====================================================
+     RECOMMENDATIONS
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Recommendations
+    </h2>
+
+    <ul id="recommendationList">
+
+        <li>
+            Analyze your results to receive general recommendations.
+        </li>
+
+    </ul>
+
+</section>
+
+
+<!-- =====================================================
+     MEAL PLAN
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Meal Plan
+    </h2>
+
+    <div id="mealPlanContent">
 
         <p>
-            Comprehensive Health Test Analyzer & Assessment
+            Analyze your results to generate a general meal plan.
         </p>
 
-        <p class="footer-note">
-            Educational project only. This tool does not provide a medical diagnosis.
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SAVED TESTS
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Saved Tests
+    </h2>
+
+    <div id="savedTestsList">
+
+        <p>
+            Loading saved tests...
         </p>
 
-    </footer>
+    </div>
+
+</section>
 
 
-    <script src="script.js"></script>
+<!-- =====================================================
+     TEST TREND
+     ===================================================== -->
+
+<section class="card large-card">
+
+    <h2>
+        Saved Tests Graph
+    </h2>
+
+    <div class="trend-controls">
+
+        <select id="trendTest">
+
+            <option value="hemoglobin">
+                Hemoglobin
+            </option>
+
+            <option value="wbc">
+                WBC
+            </option>
+
+            <option value="rbc">
+                RBC
+            </option>
+
+            <option value="platelets">
+                Platelets
+            </option>
+
+            <option value="hematocrit">
+                Hematocrit
+            </option>
+
+            <option value="mcv">
+                MCV
+            </option>
+
+            <option value="glucose">
+                Fasting Glucose
+            </option>
+
+            <option value="hba1c">
+                HbA1c
+            </option>
+
+            <option value="total_cholesterol">
+                Total Cholesterol
+            </option>
+
+            <option value="ldl">
+                LDL
+            </option>
+
+            <option value="hdl">
+                HDL
+            </option>
+
+            <option value="triglycerides">
+                Triglycerides
+            </option>
+
+            <option value="creatinine">
+                Creatinine
+            </option>
+
+            <option value="bun">
+                BUN
+            </option>
+
+            <option value="egfr">
+                eGFR
+            </option>
+
+            <option value="uric_acid">
+                Uric Acid
+            </option>
+
+            <option value="alt">
+                ALT
+            </option>
+
+            <option value="ast">
+                AST
+            </option>
+
+            <option value="tsh">
+                TSH
+            </option>
+
+            <option value="free_t4">
+                Free T4
+            </option>
+
+            <option value="vitamin_d">
+                Vitamin D
+            </option>
+
+            <option value="vitamin_b12">
+                Vitamin B12
+            </option>
+
+            <option value="ferritin">
+                Ferritin
+            </option>
+
+            <option value="iron">
+                Iron
+            </option>
+
+            <option value="calcium">
+                Calcium
+            </option>
+
+            <option value="crp">
+                CRP
+            </option>
+
+            <option value="esr">
+                ESR
+            </option>
+
+        </select>
+
+
+        <button
+            class="secondary-button"
+            onclick="generateSelectedTrend()"
+        >
+            Show Graph
+        </button>
+
+    </div>
+
+
+    <div class="chart-container">
+
+        <canvas id="trendChart"></canvas>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+    <p>
+        Comprehensive Health Test Analyzer & Assessment Project
+        <br>
+        by: ANAS SALEM
+        <br>
+         for: A O U
+
+    </p>
+
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
 
